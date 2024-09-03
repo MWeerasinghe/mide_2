@@ -1,0 +1,63 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+
+# Logs
+logs
+*.log
+logs/*.log
+
+# Dependency directories
+/node_modules
+/bower_components
+
+# Build output
+/dist
+/.next
+/out
+
+# Docker
+docker-compose.override.yml
+docker-compose.local.yml
+Dockerfile
+*.tar
+
+# PostgreSQL
+pgdata/
+*.sql
+
+# Environment variables
+.env
+
+# Editor directories and files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# MacOS
+.DS_Store
+
+# Linux
+*~
+
+# Coverage directories
+coverage/
+
+# Test files
+*.spec.js
+*.test.js
+
+# Miscellaneous
+*.swp
+*.swo
+*.bak
+*.pid
+*.seed
+
+# Ignore compiled TypeScript files
+dist/
+*.tsbuildinfo
