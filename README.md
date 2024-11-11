@@ -1,5 +1,7 @@
 # middleware_project
 
+# node packages that need 
+
 # to run the dockerfile
 docker-compose up --build
 docker-compose up --build -d //run on detached mode
