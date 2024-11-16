@@ -22,7 +22,7 @@ logs/*.log
 # Docker
 docker-compose.override.yml
 docker-compose.local.yml
-Dockerfile
+# Dockerfile
 *.tar
 
 # PostgreSQL
@@ -30,7 +30,7 @@ pgdata/
 *.sql
 
 # Environment variables
-.env
+# .env
 
 # Editor directories and files
 .idea/
