@@ -1,5 +1,8 @@
 # middleware_project
 
+# warnings
+.env file and docker files are public here keep in mind that
+
 # node packages that need 
 all are included in package-lock.json file so no need to install manually all are installed when image is running.
 
