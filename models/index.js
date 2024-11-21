@@ -1,6 +1,15 @@
-// models/index.js
-const sequelize = require('./sequelize'); // Import the Sequelize instance
-const User = require('./user'); // Import the User model
+const sequelize = require('./sequelize');
+const User = require('./user');
 
-// Export both the sequelize instance and the User model
-module.exports = { sequelize, User };
+sequelize.sync()
+    .then(() => {
+        console.log('Database synchronized successfully.');
+    })
+    .catch(err => {
+        console.error('Error syncing database:', err);
+    });
+
+module.exports = {
+    sequelize,
+    User,
+};
