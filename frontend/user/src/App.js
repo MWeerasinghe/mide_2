@@ -1,6 +1,7 @@
 import Button from '@mui/material/Button';
 import Navbar from './Components/AppBar'
-import SideBar from './Components/SideBar'
+//import SideBar from './Components/SideBar'
+import SideBarAttendance from './Components_Attendance/SideBarAttendance'
 import { BrowserRouter, Routes, Route, Navigate, Router } from 'react-router-dom';
 import Request from './Components/Request'
 import { colors } from '@mui/material';
@@ -17,7 +18,7 @@ function App()
     
     <div className="App">
     {/* <Navbar style={navbarStyle} /> */}
-      <SideBar />
+      <SideBarAttendance />
     </div>
   );
 }
