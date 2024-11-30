@@ -10,6 +10,9 @@ all are included in package-lock.json file so no need to install manually all ar
 docker-compose up --build
 docker-compose up --build -d //run on detached mode
 
+# to stop running
+docker-compose down
+
 # api will abailable at 
 http://localhost:3000
 
@@ -38,3 +41,7 @@ eg:-
   "email": "testuser@example.com",
   "password": "yourpassword"
 }
+
+# to check any node containers console
+
+docker-compose logs <app>
