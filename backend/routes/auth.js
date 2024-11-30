@@ -1,11 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User } = require('../models'); // Ensure correct import
+const { User } = require('../models');
+const validateUser = require('../Validates/userValidate')
 const router = express.Router();
 
 // Registration endpoint
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res) => 
+{
     const { email, password } = req.body;
 
     // Basic validation
@@ -25,10 +27,10 @@ router.post('/register', async (req, res) => {
 
 // Login endpoint
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, mobile, landline, gender, nic, dob, address} = req.body;
 
     // Basic validation
-    if (!email || !password) {
+    if (!email || !password || !gender || !dob) {
         return res.status(400).json({ message: 'Email and password are required' });
     }
 
@@ -46,4 +48,44 @@ router.post('/login', async (req, res) => {
     }
 });
 
+//_____________update user passwords_______________________________________
+router.put('/user', async (req, res) => 
+{
+    try 
+    {
+        const { email, password, mobile, newpassword} = req.body;
+
+        if(!email || !password || !mobile || !newpassword) {
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
+        const ifInclude = await User.findOne({where:{email, mobile}});
+
+        if(!ifInclude) {
+            return res.status(400).json({ message: 'Incorrect Current email or mobile' });
+        }
+
+        const isCorrect = bcrypt.compare(password, ifInclude.password);
+
+        if(!isCorrect){
+            return res.status(400).json({ message: 'Incorrect current password' });
+        }  
+        
+        const validationError = validateUser(email, newpassword, mobile); 
+
+        if(validationError !==0)
+        {
+            return res.status(400).json({ message: validationError });
+        }
+        const hashedPassword = await bcrypt.hash(newpassword, 10);
+
+        await User.update({ password: hashedPassword }, { where: { email, mobile } });
+
+        return res.status(200).json({ message: 'password successfully updated' });
+    } 
+    catch (error) 
+    {
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Error updating password', error });
+    }
+});
 module.exports = router;

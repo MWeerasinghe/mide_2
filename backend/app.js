@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { sequelize } = require('./models'); // Import the sequelize instance
 const authRoutes = require('./routes/auth'); // Import authentication routes
+const routings = require('./path/routing');
 require('dotenv').config();
 
 
@@ -15,7 +16,7 @@ app.use(cors()); // Enable CORS
 app.use(bodyParser.json()); // Parse JSON request bodies
 
 // Routes
-app.use('/api/auth', authRoutes); // Use authentication routes
+app.use('/api', routings); // Use authentication routes
 
 // Test endpoint
 app.get('/', (req, res) => {

@@ -1,10 +1,13 @@
 // src/EditProfile.js
 import React, { useEffect, useState } from 'react';
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TextField, Button, Typography, Box, Avatar } from '@mui/material';
+import getUserIdFromToken from '../functions/GetUserId';
+
 
 const EditProfile = () => {
-  const [profile, setProfile] = useState({ name: '', email: '', imageUrl: '' });
+  // const [profile, setProfile] = useState({ name: '', email: '', imageUrl: '' });
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -12,35 +15,48 @@ const EditProfile = () => {
   const [currentPassword, setCurrentPassword] = useState('');
 //   const [dbPassword,  setdbPassword] = useState('')
 
-  useEffect(() => {
-    const fetchProfile = async () => 
-    {
-      try {
-        const response = await axios.get("http://localhost:4000/api/users/3");
-        setProfile({
-          name: response.data.user.name,
-          email: response.data.user.email,
-          imageUrl: response.data.user.image,
-        });
-        // console.log(response.data);
-      } 
-      catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
-    };
+const [profile, setProfile] = useState({ name: '', email: '', photo: '' });
 
-    fetchProfile();
-  }, []);
+useEffect(() => 
+{
+  const fetchProfile = async () => 
+  {
+    try 
+    {
+      const token = localStorage.getItem('vajira_token');
+      const id = getUserIdFromToken();
+      if(!id) 
+      {
+        window.alert('Please login first');
+        return <Navigate to="/" />;
+      } 
+      
+      const response = await axios.get(`http://localhost:3000/api/user/user/${id}`, {headers: {'Authorization': `Bearer ${token}`}});
+      console.log(response.data.data.user);
+      setProfile({
+        name: response.data.data.user.name,
+        email: response.data.data.user.email
+      });
+    } 
+    catch (error) 
+    {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  fetchProfile();
+}, []);
+
 
   const handlePasswordChange = async () => 
   {
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{7,}$/;
 
-    if (password !== confirmPassword) {
+    if(password !== confirmPassword) {
         setError("Passwords do not match.");
         return;
     }
-    if (!passwordPattern.test(password)) {
+    if(!passwordPattern.test(password)) {
         setError("Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, and a number.");
         return;
     }
@@ -50,30 +66,36 @@ const EditProfile = () => {
 
     try
     {
-        const response = await axios.put('http://localhost:4000/api/users/3', { password, currentPassword });
-        if(response.status === "success")
+        const token = localStorage.getItem('vajira_token');
+        const email = profile.email;
+        console.log(email, currentPassword, confirmPassword);
+        const response = await axios.put('http://localhost:3000/api/user/user', {email, currentPassword, confirmPassword }, {headers: {'Authorization': `Bearer ${token}`}});
+        if(response.status === 200)
         {
-            setSuccessMessage(response.message);
+            console.log(response);
+            setSuccessMessage("Password is changed successfully");
             setPassword('');
             setConfirmPassword('');
+            setError('');
         }
         else
         {
-            setError(response.message);
+            console.log('else',response);
+            setError('current password is invalid');
         }
     }
     catch(error)
     {
         setError("Internal server error");
-    }
-           
+    }       
 };
 
 
   return (
-    <Box sx={{ padding: 1, maxWidth: '600px', margin: 'auto', textAlign: 'center' }}>
+    <Box sx={{ padding: 1, maxWidth: '600px', margin: 'auto', textAlign: 'center', mt: -4 }}>
+
       {/* Centered Profile Avatar */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
         <Avatar
           alt={profile.name}
           src={profile.imageUrl}
@@ -88,41 +110,22 @@ const EditProfile = () => {
 
       {/* Display Name (Read-only) */}
       {/* {console.log("huttaaaa"+profile)} */}
-      <TextField
-        label="Name"
-        value={profile.name}
-        InputProps={{
-          readOnly: true,
-          sx: {
-            height: '42px', 
-            padding: '4px 8px', 
-            fontSize: '0.875rem', 
-            },
-        }}
-        variant="outlined"
-        sx={{ width: '100%'}} 
-        margin="normal"
-      />
+      <Box sx={{ width: '100%', marginBottom: 2 }}>
+  {/* Display Name */}
+  <Typography variant="h6" sx={{ fontSize: '2rem', fontWeight: 'bold' }}>
+    {profile.name}
+  </Typography>
+</Box>
 
-      {/* Display Email (Read-only) */}
-      <TextField
-        label="Email"
-        value={profile.email}
-        InputProps={{
-          readOnly: true,
-          sx: {
-            height: '42px', 
-            padding: '4px 8px', 
-            fontSize: '0.875rem', 
-            },
-        }}
-        variant="outlined"
-        sx={{ width: '100%' }}
-        margin="normal"
-      />
+<Box sx={{ width: '100%' }}>
+  {/* Display Email */}
+  <Typography variant="body1" sx={{ fontSize: '1rem' }}>
+    {profile.email}
+  </Typography>
+</Box>
 
       {/* Password Change Section */}
-      <Typography variant="h6" color="textSecondary" marginTop={2}>Change Password</Typography>
+      <Typography variant="h6" color="textSecondary" marginTop={2}>Change Your Password</Typography>
 
       <TextField
         label="Current Password"

@@ -1,24 +1,34 @@
-import React , { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
-
 import StudentRequests from './Request';
-import QrGenerator from './QrGenerator'
+import QrGenerator from './QrGenerator';
 import downloadImage from '../assets/download.png';
+import firstlogo from '../assets/logo10.jpg';
+
 
 import { extendTheme, styled } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import PersonIcon from '@mui/icons-material/Person';
+import EditIcon from '@mui/icons-material/Edit';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import QrCodeIcon from '@mui/icons-material/QrCode';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
-import EnableDisable from './EanableDisable'
+import EnableDisable from './EanableDisable';
 import Profile from './Profile';
 import EditProfile from './Edit_profile';
 import Permission from './Permission';
+import Logout from './Logout';
+
+
+
 
 const NAVIGATION = [
   {
@@ -27,29 +37,46 @@ const NAVIGATION = [
   },
   {
     segment: 'dashboard',
-    title: (<Link to="/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>Dashboard </Link>),
+    title: (
+      <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+        Dashboard
+      </Link>
+    ),
     icon: <DashboardIcon />,
     path: '/profile',
   },
   {
-    segment: 'orders',
+    segment: 'edit-profile',
     title: 'Profile',
-    icon: <ShoppingCartIcon />,
+    icon: <PersonIcon />,
     children: [
       {
-        segment: 'sales',
-        title: (<Link to="/edit-profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><DescriptionIcon style={{ marginRight: 18 }} />Edit </Link>),
-      },
-      {
-        segment: 'traffic',
-        title: (<Link to="/permission" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><DescriptionIcon style={{ marginRight: 18 }} />Permission</Link>),
-      },
-      {
-        segment: 'lms_library',
+        segment: '',
         title: (
-          <Link to="/library-requests" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}> <DescriptionIcon style={{ marginRight: 20 }} /> Open Requests For Library </Link>
+          <Link to="/edit-profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+            <EditIcon style={{ marginRight: 18 }} />
+            Edit
+          </Link>
         ),
       },
+      {
+        segment: '',
+        title: (
+          <Link to="/permission" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+            <LockOpenIcon style={{ marginRight: 18 }} />
+            Permission
+          </Link>
+        ),
+      },
+      // {
+      //   segment: '',
+      //   title: (
+      //     <Link to="/library-requests" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      //       <AssignmentIcon style={{ marginRight: 20 }} />
+      //       Open Requests For Library
+      //     </Link>
+      //   ),
+      // },
     ],
   },
   {
@@ -67,21 +94,39 @@ const NAVIGATION = [
       {
         segment: 'traffic',
         title: (
-          <Link to="/qr-generator" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}> <DescriptionIcon style={{ marginRight: 20 }} />QR Code</Link>
+          <Link to="/qr-generator" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+            <QrCodeIcon style={{ marginRight: 20 }} />
+            QR Code
+          </Link>
         ),
       },
       {
-        segment: 'sales',
-        title: 'Other',
-        icon: <DescriptionIcon />,
+        // segment: 'profile',
+        // title: 'Other',
+        // icon: <DescriptionIcon />,
+        segment: 'traffic',
+        title: (
+          <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+            <DescriptionIcon style={{ marginRight: 20 }} />
+            Other
+          </Link>
+        ),
       },
-      
     ],
   },
   {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
+    segment: 'logout',
+    title: <Link to="/logout" style={{
+      textDecoration: 'none', // Removes the underline
+      color: '#FFFFFF', 
+      fontWeight: 'bold', // Makes the text bold
+      fontSize: '16px', // Sets the font size (adjust as needed)
+      padding: '4px 8px', // Adds padding for better spacing
+      borderRadius: '4px', // Optional: Adds rounded corners
+      // transition: 'background-color 0.3s ease', 
+    }}
+    >Logout</Link>,
+    icon: <Link to="/logout"><LogoutIcon /></Link>,
   },
 ];
 
@@ -99,35 +144,16 @@ const demoTheme = extendTheme({
   },
 });
 
-function useDemoRouter(initialPath)
-{
-  const [pathname, setPathname] = React.useState(initialPath);
-
-  const router = React.useMemo(() => 
-  {
-    return {
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path) => setPathname(String(path)),
-    };
-  }, [pathname]);
-
-  return router;
-}
-
-const Skeleton = styled('div')(({ theme, height }) => 
-({
+const Skeleton = styled('div')(({ theme, height }) => ({
   backgroundColor: theme.palette.action.hover,
   borderRadius: theme.shape.borderRadius,
   height,
   content: '" "',
 }));
 
-
-
 export default function DashboardLayoutBasic(props) 
 {
-    useEffect(() => 
+  useEffect(() => 
     {
         const titleElement = document.querySelector('.MuiTypography-root.MuiTypography-h6.css-1je49cu-MuiTypography-root');
         if (titleElement) 
@@ -150,30 +176,92 @@ export default function DashboardLayoutBasic(props)
         }
       }, []);
 
+      
+  const [isAuthenticated, setIsAuthenticated] = useState('');
+  const navigate = useNavigate();
+
+  // Authentication check function
+  const checkAuth = async () => 
+  {
+    const token = localStorage.getItem('vajira_token'); // Get token from localStorage
+    // console.log(token);
+    if (!token) 
+    {
+      setIsAuthenticated(false);
+      return;
+    }
+
+    try 
+    {
+      const response = await axios.post('http://localhost:3000/api/verify-token/verify', {}, { headers: {'Authorization': `Bearer ${token}`},});
+      // console.log("result", response);
+      if(response.status === 200) 
+      {
+        // console.log("response eka ",response.status);
+        setIsAuthenticated(true); // Token is valid
+      } 
+      else 
+      {
+        localStorage.removeItem('token'); // Remove invalid token
+        setIsAuthenticated(false);
+      }
+    } 
+    catch (error) 
+    {
+      // console.error('Error verifying token:', error);
+      localStorage.removeItem('token'); // Remove invalid token if error occurs
+      setIsAuthenticated(false);
+    }
+  };
+
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const logout = () => {
+    localStorage.removeItem('vajira_token'); // Clear token from localStorage
+    setIsAuthenticated(false); // Set authentication status to false
+    navigate('/'); // Redirect to the login page
+  };
+
+  if (isAuthenticated === false) {
+    return <Navigate to="/" />;
+  }
   
-  const { window } = props;
-  const router = useDemoRouter('/');
-  const demoWindow = window ? window() : undefined;
-
-
 
   return (
-    // sx={{ backgroundColor: '#e97100' }}
-    <Router>
-    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme} window={demoWindow} >
-      <DashboardLayout >
-        <PageContainer >
-            <Routes>
-                <Route path="/student-request" element={<StudentRequests />} />
-                <Route path="/qr-generator" element={<QrGenerator />} />
-                <Route path='/enable-disable' element={<EnableDisable/>} />
-                <Route path='/profile' element={<Profile/>} />
-                <Route path='/edit-profile' element={<EditProfile/>} />
-                <Route path='/permission' element={<Permission/>} />
-            </Routes>
+    <AppProvider navigation={NAVIGATION} theme={demoTheme}>
+      <DashboardLayout>
+        <PageContainer>
+
+        {/* <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+            <button
+              onClick={logout}
+              style={{
+                backgroundColor: '#f44336',
+                color: '#fff',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              Logout
+            </button>
+          </div> */}
+          <Routes>
+            <Route path="/dashboard" element={<Navigate to="/profile" />} />
+            <Route path="/student-request" element={<StudentRequests />} />
+            <Route path="/qr-generator" element={<QrGenerator />} />
+            <Route path="/enable-disable" element={<EnableDisable />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/permission" element={<Permission />} />
+            <Route path="/logout" element={<Logout />} />
+          </Routes>
         </PageContainer>
       </DashboardLayout>
     </AppProvider>
-    </Router>
   );
 }
