@@ -20,8 +20,8 @@ const Permission = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log(permisionData.data.data.libMemberOpen);
-        console.log(permisionData.data.data.libMemberStudent);
+        console.log(permisionData.data.data);
+        // console.log(permisionData.data.data.libMemberStudent);
 
         if (permisionData.data.data.libMemberOpen !== null) {
           setLib(true);

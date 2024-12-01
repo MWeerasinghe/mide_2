@@ -12,9 +12,10 @@ router.post('/register', async (req, res) =>
 {
     const { email, password, landline, gender, nic, dob, address, name, mobile } = req.body;
 
-    if (!email || !password) 
+    const validationError = ValidateRegister(email, password);
+    if(validationError) 
     {
-        return res.status(400).json({ message: 'Email and password are required' });
+        return res.status(400).json({ message: validationError });
     }
 
     try 
@@ -45,8 +46,9 @@ router.post('/register', async (req, res) =>
 
 
 
-// Login endpoint
-router.post('/login', async (req, res) => {
+//__________________Login user_____________________
+router.post('/login', async (req, res) => 
+{
     const { email, password} = req.body;
 
     // Basic validation

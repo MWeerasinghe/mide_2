@@ -113,6 +113,48 @@ const libMemberStudentQuery = `
     LIMIT 1
 `;
 
+const libMemberTheroQuery = `
+    SELECT * 
+    FROM lib_member_thero 
+    WHERE user_id = :userId 
+    LIMIT 1
+`;
+
+const dhamStudentQuery = `
+    SELECT * 
+    FROM dham_student 
+    WHERE user_id = :userId 
+    LIMIT 1
+`;
+
+const dhamTeacherQuery = `
+    SELECT * 
+    FROM dham_teacher 
+    WHERE user_id = :userId 
+    LIMIT 1
+`;
+
+const dhamStaffQuery = `
+    SELECT * 
+    FROM dham_staff 
+    WHERE user_id = :userId 
+    LIMIT 1
+`;
+
+const adminQuery = `
+    SELECT * 
+    FROM admin 
+    WHERE user_id = :userId 
+    LIMIT 1
+`;
+
+const libStaffQuery = `
+    SELECT * 
+    FROM lib_staff 
+    WHERE user_id = :userId 
+    LIMIT 1
+`;
+
 
 router.get('/user/:id', async (req, res) => {
     const id = req.params.id;
@@ -130,16 +172,44 @@ router.get('/user/:id', async (req, res) => {
         }
 
         // Fetch related data using raw queries
-        const libMemberOpen = await sequelize.query(libMemberOpenQuery, {replacements: { userId: id }, type: sequelize.QueryTypes.SELECT,
-        }).catch(err => {
-            console.error('Error fetching lib_member_open:', err);
-            throw new Error('Error fetching lib_member_open');
+        const libMemberOpen = await sequelize.query(libMemberOpenQuery, {
+            replacements: { userId: id },
+            type: sequelize.QueryTypes.SELECT,
         });
 
-        const libMemberStudent = await sequelize.query(libMemberStudentQuery, { replacements: { userId: id }, type: sequelize.QueryTypes.SELECT,
-        }).catch(err => {
-            console.error('Error fetching lib_member_student:', err);
-            throw new Error('Error fetching lib_member_student');
+        const libMemberStudent = await sequelize.query(libMemberStudentQuery, {
+            replacements: { userId: id },
+            type: sequelize.QueryTypes.SELECT,
+        });
+
+        const libMemberThero = await sequelize.query(libMemberTheroQuery, {
+            replacements: { userId: id },
+            type: sequelize.QueryTypes.SELECT,
+        });
+
+        const dhamStudent = await sequelize.query(dhamStudentQuery, {
+            replacements: { userId: id },
+            type: sequelize.QueryTypes.SELECT,
+        });
+
+        const dhamTeacher = await sequelize.query(dhamTeacherQuery, {
+            replacements: { userId: id },
+            type: sequelize.QueryTypes.SELECT,
+        });
+
+        const dhamStaff = await sequelize.query(dhamStaffQuery, {
+            replacements: { userId: id },
+            type: sequelize.QueryTypes.SELECT,
+        });
+
+        const admin = await sequelize.query(adminQuery, {
+            replacements: { userId: id },
+            type: sequelize.QueryTypes.SELECT,
+        });
+
+        const libStaff = await sequelize.query(libStaffQuery, {
+            replacements: { userId: id },
+            type: sequelize.QueryTypes.SELECT,
         });
 
         // Prepare the response
@@ -147,11 +217,17 @@ router.get('/user/:id', async (req, res) => {
             user,
             libMemberOpen: libMemberOpen.length > 0 ? libMemberOpen[0] : null,
             libMemberStudent: libMemberStudent.length > 0 ? libMemberStudent[0] : null,
+            libMemberThero: libMemberThero.length > 0 ? libMemberThero[0] : null,
+            dhamStudent: dhamStudent.length > 0 ? dhamStudent[0] : null,
+            dhamTeacher: dhamTeacher.length > 0 ? dhamTeacher[0] : null,
+            dhamStaff: dhamStaff.length > 0 ? dhamStaff[0] : null,
+            admin: admin.length > 0 ? admin[0] : null,
+            libStaff: libStaff.length > 0 ? libStaff[0] : null,
         };
+
         return res.status(200).json({ message: 'User found', data: responseData });
     } 
-    catch (error) 
-    {
+    catch (error) {
         console.error('Error retrieving user:', error);
         return res.status(500).json({ message: 'Error retrieving user', error: error.message || 'Unknown error' });
     }

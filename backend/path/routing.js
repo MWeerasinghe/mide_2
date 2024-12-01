@@ -9,7 +9,7 @@ const userController = require('../controllers/userController');
 
 router.use('/verify-token', verifyToken, userController);
 router.use('/auth', authController);
-router.use('/user', verifyToken, userController);
+router.use('/user', userController);
 
 
 module.exports = router;
