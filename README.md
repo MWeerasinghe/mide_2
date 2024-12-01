@@ -17,7 +17,7 @@ docker-compose down
 http://localhost:3000
 
 # how to connect db to pgadmin
-docker inspect <db image id>
+docker inspect <db image id> # mostlye :-172.19.0.2
 * take the ipv4 address from above command use "sudo" if needed
 * add this ip address , uesr name and password from db environment in docker-compose file
 
@@ -45,3 +45,15 @@ eg:-
 # to check any node containers console
 
 docker-compose logs <app>
+
+# How to get a Backup from the postgres container
+
+*sudo docker exec -i postgres_container pg_dump -U username yourdb > backup.sql
+
+# How to restore a DB to postgres container
+
+*first through UI of pg admin delete the current db
+*then make a new db named "yourdb"
+*then use below command to restore the db
+   docker exec -i postgres_container psql -U your_username -d yourdb < ./backup.sql
+
