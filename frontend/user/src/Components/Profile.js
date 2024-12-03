@@ -1,72 +1,99 @@
 // src/Profile.js
 import React, { useEffect, useState } from 'react';
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import DashImg from '../assets/vajira.jpg';
+import getUserIdFromToken from '../functions/GetUserId';
+import firstlogo from '../assets/logo10.jpg';
 
-const Profile = () => {
-  const [profile, setProfile] = useState({ name: '', photo: '' });
 
-  useEffect(() => {
-    // Fetch user data here, replace with actual API endpoint
-    axios.get('/api/user/profile')
-      .then(response => {
+const Profile = () => 
+{
+  const [profile, setProfile] = useState({ name: '', email: '', name: '' });
+
+  useEffect(() => 
+  {
+    const fetchProfile = async () => 
+    {
+      try 
+      {
+        const token = localStorage.getItem('vajira_token');
+        const id = getUserIdFromToken();
+        if(!id) 
+        {
+          window.alert('Please login first');
+          return <Navigate to="/" />;
+        } 
+        
+        const response = await axios.get(`http://localhost:3000/api/auth/user/${id}`, {headers: {'Authorization': `Bearer ${token}`}});
         setProfile({
           name: response.data.name,
-          photo: response.data.photo, // assuming photo URL is returned
+          email: response.data.email,
+          name: response.data.name
         });
-      })
-      .catch(error => {
+      } 
+      catch (error) 
+      {
         console.error("Error fetching profile data:", error);
-      });
+      }
+    };
+
+    fetchProfile();
   }, []);
+
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: '20px' }}>
+          <img src={firstlogo} alt="Children's Programs Icon" width={1150} height={90} />
       <img
-        src={profile.photo || 'https://scontent.fcmb4-2.fna.fbcdn.net/v/t39.30808-6/459190714_1928817497620443_6842674175914875401_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeG7chhinSN8w4oQqH4XIMI3J6JQtG-9leknolC0b72V6UWdYE9sr3R00m8HTVMaqR7SgynRzuamAJvtCPYW1r15&_nc_ohc=AKECKbsqCYsQ7kNvgEO1G51&_nc_zt=23&_nc_ht=scontent.fcmb4-2.fna&_nc_gid=ASayuQ1C8Ss2ydP7bc2cpoW&oh=00_AYDiQ21MLdoktiUlQjqrEhpLnQT9qrOr1GiozNE9iTRvVg&oe=6736C04A'} // Default image if no photo is available
+        src={profile.photo || DashImg} // Default image if no photo is available
         alt="Profile"
         style={{
-          width: '90%',
+          width: '100%',
           height: '400px',
-        //   borderRadius: '50%',
           marginBottom: '15px',
-          border: '2px solid orange'
+          // border: '1px solid orange',
+          borderRadius: '4px', // Slightly round corners
+          // boxShadow: '0px 0px 30px 15px rgba(255, 255, 255, 0.5)', // Blurred corners
+          filter: 'blur(0.5px)', // Slight blur for the edges
+          backgroundColor: 'transparent', // Matches the background if necessary
         }}
       />
+
       {/* <h2 style={{ margin: 0, color: '#e97100' }}>{profile.name || 'User Name'}</h2> */}
       
       {/* Buttons for Library and LMS Access */}
       <div style={{ marginTop: '15px', display: 'flex', gap: '10px' }}>
       <Button
-  variant="contained"
-  color="primary"
-  component={Link}
-  to="/library-access"
-  style={{
-    backgroundColor: '#e97100',
-    padding: '22px 24px',  // Increases padding
-    fontSize: '1.1rem',    // Increases font size
-    width: '200px',        // Adjusts width as needed
-  }}
->
-  Library
-</Button>
+        variant="contained"
+        color="primary"
+        component={Link}
+        to="/library-access"
+        style={{
+          backgroundColor: '#e97100',
+          padding: '22px 24px', 
+          fontSize: '1.1rem',  
+          width: '200px',    
+        }}
+      >
+        Library
+      </Button>
 
-<Button
-  variant="contained"
-  color="secondary"
-  component={Link}
-  to="/lms-access"
-  style={{
-    backgroundColor: '#0074e9',
-    padding: '22px 24px',  // Increases padding
-    fontSize: '1.1rem',    // Increases font size
-    width: '200px',        // Adjusts width as needed
-  }}
->
-LMS
-</Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        component={Link}
+        to="/lms-access"
+        style={{
+          backgroundColor: '#0074e9',
+          padding: '22px 14px', 
+          fontSize: '1.1rem', 
+          width: '200px', 
+        }}
+      >
+      Dhamma School
+      </Button>
       </div>
     </div>
   );

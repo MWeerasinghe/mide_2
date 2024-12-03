@@ -1,29 +1,51 @@
-// src/Permission.js
-import React, { useState } from 'react';
-import { Typography, List, ListItem, ListItemText, Box, Divider, ToggleButton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Typography, List, ListItem, ListItemText, Divider, ToggleButton } from '@mui/material';
+import axios from 'axios';
+import getUserIdFromToken from '../functions/GetUserId';
 
 const Permission = () => {
-  // Dummy data representing sections with initial active/inactive states
-  const [permissions, setPermissions] = useState([
-    { name: "Physical Library Access", accessible: true },
-    { name: "Digital Library", accessible: true },
-    { name: "LMS", accessible: true },
- 
-  ]);
+  const [lib, setLib] = useState(false);
+  const [dhamma, setDhamma] = useState(false);
 
-  // Toggle the accessibility of a section
-  const handleToggle = (index) => {
-    setPermissions((prevPermissions) =>
-      prevPermissions.map((perm, i) =>
-        i === index ? { ...perm, accessible: !perm.accessible } : perm
-      )
-    );
-  };
+  useEffect(() => {
+    const fetchPermission = async () => {
+      try {
+        const token = localStorage.getItem('vajira_token');
+        const id = getUserIdFromToken();
+        if (!id) {
+          window.alert('Please login first');
+          return;
+        }
+        const permisionData = await axios.get(`http://localhost:3000/api/user/user/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log(permisionData.data.data);
+        // console.log(permisionData.data.data.libMemberStudent);
+
+        if (permisionData.data.data.libMemberOpen !== null) {
+          setLib(true);
+        }
+        if (permisionData.data.data.libMemberStudent !== null) {
+          setDhamma(true);
+        }
+      } catch (error) {
+        console.error('Error fetching permission data:', error);
+      }
+    };
+
+    fetchPermission();
+  }, []);
+
+  const permissions = [
+    { name: 'Physical Library', accessible: lib },
+    { name: 'Dhamma School', accessible: dhamma },
+  ];
 
   return (
-    // <Box sx={{ maxWidth: '600px', margin: 'auto', padding: '16px', boxShadow: 3, borderRadius: 2 }}>
     <div>
-      <Typography variant="h5" color="primary" gutterBottom>User Permissions</Typography>
+      <Typography variant="h5" color="primary" gutterBottom sx={{ textAlign: 'center' }} >Your Permissions</Typography>
+
 
       <Divider sx={{ marginBottom: 2 }} />
 
@@ -31,26 +53,40 @@ const Permission = () => {
       <List dense>
         {permissions.map((permission, index) => (
           <ListItem key={index} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <ListItemText
-              primary={permission.name}
-              sx={{
-                color: permission.accessible ? 'success.main' : 'error.main',
-              }}
-            />
+          <ListItemText
+            primary={permission.name}
+            sx={{
+              color: permission.accessible ? 'success.main' : 'error.main',
+              fontSize: '1 rem', // Set font size here
+              fontWeight: '', // Optional: Adjust font weight for emphasis
+            }}
+          />
+
             <ToggleButton
-              value="check"
-              selected={permission.accessible}
-              onChange={() => handleToggle(index)}
-              sx={{
-                border: '1px solid',
-                borderColor: permission.accessible ? 'success.main' : 'error.main',
-                bgcolor: permission.accessible ? 'success.light' : 'error.light',
-                color: permission.accessible ? 'success.contrastText' : 'error.contrastText',
-                ':hover': { bgcolor: permission.accessible ? 'success.dark' : 'error.dark' },
-              }}
-            >
-              {permission.accessible ? 'Active' : 'Inactive'}
-            </ToggleButton>
+                value="check"
+                selected={permission.accessible}
+                disabled // Disable the button to prevent state changes
+                sx={{
+                  border: '2px solid',
+                  borderColor: permission.accessible ? 'success.main' : 'error.main',
+                  backgroundColor: permission.accessible ? 'success.light' : 'error.light',
+                  color: permission.accessible ? 'success.contrastText' : 'error.contrastText',
+                  padding: '8px 16px',
+                  minWidth: '100px', // Ensures consistent size
+                  fontWeight: 'bold',
+                  borderRadius: '8px', // Makes the button more stylish
+                  fontSize: '0.775rem', // Adjusts font size
+                  textTransform: 'uppercase', // Makes text look prominent
+                  ':hover': {
+                    backgroundColor: permission.accessible
+                      ? 'success.dark'
+                      : 'error.dark',
+                    color: '#fff',
+                  },
+                }}
+              >
+                {permission.accessible ? 'Active' : 'Inactive'}
+              </ToggleButton>
           </ListItem>
         ))}
       </List>

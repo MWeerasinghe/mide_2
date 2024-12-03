@@ -1,39 +1,50 @@
 import React, {useState, useRef , useEffect} from 'react'
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import QRCode from "react-qr-code";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import getUserIdFromToken from '../functions/GetUserId';
+
 
 function QrGenerator() 
 {
+
+  //_______________fetch user data__________________________________________
+  const [profile, setProfile] = useState({ name: '', email: '', photo: '' });
+  const [UserID, setText] = useState('');
+
+  useEffect(() => 
+  {
+      const fetchProfile = async () => 
+      {
+        try 
+        {
+          const token = localStorage.getItem('vajira_token');
+          const id = getUserIdFromToken();
+          const idAsString = String(id);
+          if(!id) 
+          {
+            window.alert('Please login first');
+            return <Navigate to="/" />;
+          } 
+          
+          const response = await axios.get(`http://localhost:3000/api/user/user/${id}`, {headers: {'Authorization': `Bearer ${token}`}});
+          setProfile({ name: response.data.data.user.name, email: response.data.data.user.email});
+          setText(`${idAsString}, ${response.data.data.user.email}`);
+        } 
+        catch(error) 
+        {
+          console.error("Error fetching profile data:", error);
+        }
+      };
+      fetchProfile();
+    }, []);
+
+
+
   const svgRef = useRef(null);
 
-  const [UserID, setText] = useState('');
-  useEffect(() => {
-    localStorage.setItem("userId", "2578")
-  }, []);
-
-  useEffect(() =>{
-    const uid = localStorage.getItem("userId");
-    if (uid) 
-    {
-      console.log("User ID found in localStorage:", uid);
-      setText(uid);
-    } 
-    else 
-    {
-      console.log("No User ID found in localStorage.");
-    }
-  }, [])
-
-  // function generatorQR(e)
-  // {
-  //   setText();
-  // }
-
-  // function handleChange(e)
-  // {
-  //   setText(e.target.value);
-  // }
 
   function downloadQRCode() 
   {
@@ -63,14 +74,13 @@ function QrGenerator()
 
 
   return (
-    <div className='qrScanner' style={{ marginLeft: '-50%', flexDirection: 'column', display: 'flex', justifyContent: 'center', alignItems: 'center',}}>
-        <h1>QR Code Generator</h1>
+    <div className='qrScanner' style={{ marginLeft: '-30%', flexDirection: 'column', display: 'flex', justifyContent: 'center', alignItems: 'center',}}>
+        <h1>download your QR code</h1>
         <div ref={svgRef}  className='qr-container' style={{ backgroundColor: 'grey', padding: '10px', borderRadius: '0px', width: 'auto', display: 'inline-block'}}>
           <QRCode value={UserID} />
+          {console.log(UserID)}
         </div>
         <div className='input-here' style={{flexDirection: 'column', display: 'flex'}}>
-          {/* <input type = 'hidden' value={UserID} onChange={(e)=>{handleChange(e)}}/> */}
-          {/* <button onClick={downloadQRCode} style={{ marginTop: '10px' }}>Download QR Code</button> */}
           <Button onClick={downloadQRCode} variant="contained" disableElevation style={{ marginTop: '10px' }}>Download QR</Button>
         </div>
     </div>
