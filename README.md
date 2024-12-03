@@ -57,3 +57,7 @@ docker-compose logs <app>
 *then use below command to restore the db
    docker exec -i postgres_container psql -U your_username -d yourdb < ./backup.sql
 
+# How to restore a DB to postgres container(Windows)
+docker cp C:\Users\ishan\OneDrive\Desktop\mide_2\mydb2.sql mide_2-db-1:/tmp/mydb2.sql
+docker exec -it mide_2-db-1 psql -U zeus -d yourdb
+\i '/tmp/mydb2.sql';
