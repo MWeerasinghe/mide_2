@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Backend service
+  app:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile  # Specify the Dockerfile for the backend
+    ports:
+      - "3000:3000"  # Map the backend port to the host
+    environment:
+      - DATABASE_URL=postgres://zeus:yourpassword@db:5432/yourdb
+    depends_on:
+      - db  # Wait for the database to be ready before starting the backend
+    networks:
+      - app-network
+
+  # Frontend service
+  react-frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile  # Specify the Dockerfile for the frontend
+    ports:
+      - "4000:4000"  # Map the frontend port to the host
+    environment:
+      - PORT=4000
+    depends_on:
+      - app  # Wait for the backend to be ready before starting the frontend
+    networks:
+      - app-network
+
+  # PostgreSQL database service
+  db:
+    image: postgres:14
+    ports:
+      - "5432:5432"  # Map the PostgreSQL port to the host
+    environment:
+      POSTGRES_DB: yourdb
+      POSTGRES_USER: zeus
+      POSTGRES_PASSWORD: yourpassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist database data
+    networks:
+      - app-network
+
+  # PGAdmin service for managing the database via UI
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "8085:80"  # Access PGAdmin on port 8085
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+# Define a named volume for PostgreSQL data persistence
+volumes:
+  postgres_data:
+
+# Define a custom network for inter-container communication
+networks:
+  app-network:
+    driver: bridge
