@@ -43,10 +43,10 @@ const NAVIGATION = [
       </Link>
     ),
     icon: <DashboardIcon />,
-    path: '/dashboard/profile',
+    path: '/profile',
   },
   {
-    segment: '/dashboard/edit-profile',
+    segment: 'edit-profile',
     title: 'Profile',
     icon: <PersonIcon />,
     children: [
@@ -106,9 +106,9 @@ const NAVIGATION = [
         // icon: <DescriptionIcon />,
         segment: 'traffic',
         title: (
-          <Link to="/dashboard/enable-disable" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 20 }} />
-            About
+            Other
           </Link>
         ),
       },
@@ -154,27 +154,27 @@ const Skeleton = styled('div')(({ theme, height }) => ({
 export default function DashboardLayoutBasic(props) 
 {
   useEffect(() => 
-  {
-      const titleElement = document.querySelector('.MuiTypography-root.MuiTypography-h6.css-1je49cu-MuiTypography-root');
-      if (titleElement) 
-      {
-        titleElement.textContent = 'Vajiraramaya'; // Replace "Vajiraramaya" with your desired text
-        titleElement.style.color = 'orange';
-      }
+    {
+        const titleElement = document.querySelector('.MuiTypography-root.MuiTypography-h6.css-1je49cu-MuiTypography-root');
+        if (titleElement) 
+        {
+          titleElement.textContent = 'Vajiraramaya'; // Replace "Vajiraramaya" with your desired text
+          titleElement.style.color = 'orange';
+        }
 
-      const imageContainer = document.querySelector('.css-yzjoij');
-      if (imageContainer) {
-      // Clear existing SVG content
-      imageContainer.innerHTML = '';
+        const imageContainer = document.querySelector('.css-yzjoij');
+        if (imageContainer) {
+        // Clear existing SVG content
+        imageContainer.innerHTML = '';
 
-      const newImage = document.createElement('img');
-      newImage.src = downloadImage; // Use imported path if it's within src
-      newImage.width = 40;
-      newImage.height = 40;
-      // Append the new image to the container
-      imageContainer.appendChild(newImage);
-      }
-    }, []);
+        const newImage = document.createElement('img');
+        newImage.src = downloadImage; // Use imported path if it's within src
+        newImage.width = 40;
+        newImage.height = 40;
+        // Append the new image to the container
+        imageContainer.appendChild(newImage);
+        }
+      }, []);
 
       
   const [isAuthenticated, setIsAuthenticated] = useState('');
@@ -234,14 +234,31 @@ export default function DashboardLayoutBasic(props)
     <AppProvider navigation={NAVIGATION} theme={demoTheme}>
       <DashboardLayout>
         <PageContainer>
+
+        {/* <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+            <button
+              onClick={logout}
+              style={{
+                backgroundColor: '#f44336',
+                color: '#fff',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              Logout
+            </button>
+          </div> */}
           <Routes>
-            <Route path="/" element={<Navigate to="/dashboard/profile" />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="edit-profile" element={<EditProfile />} />
-            <Route path="permission" element={<Permission />} />
-            <Route path="qr-generator" element={<QrGenerator />} />
-            <Route path="enable-disable" element={<EnableDisable />} />
-            <Route path="logout" element={<Logout />} />
+            <Route path="/dashboard" element={<Navigate to="/profile" />} />
+            <Route path="/student-request" element={<StudentRequests />} />
+            <Route path="/qr-generator" element={<QrGenerator />} />
+            <Route path="/enable-disable" element={<EnableDisable />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/permission" element={<Permission />} />
+            <Route path="/logout" element={<Logout />} />
           </Routes>
         </PageContainer>
       </DashboardLayout>

@@ -66,7 +66,7 @@ const Dashboard = () => {
       </Grid>
 
       {/* Box 2: Classes */}
-      <Grid item xs={12} sm={6} md={4}>
+      {/* <Grid item xs={12} sm={6} md={4}>
         <Card>
           <CardContent>
             <Typography variant="h5" component="div">
@@ -78,7 +78,7 @@ const Dashboard = () => {
             </Typography>
           </CardContent>
         </Card>
-      </Grid>
+      </Grid> */}
 
       {/* Box 3: Attendance Count */}
       <Grid item xs={12} sm={6} md={4}>

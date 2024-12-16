@@ -47,6 +47,12 @@ const Login = ({ setUserType }) => {
         console.log("User type set to: employee");
         navigate("/empDashboard"); // Navigate to employee dashboard
       } 
+      else if(data.admin) 
+      {
+        setUserType("admin"); // Update user type in App.js
+        console.log("User type set to: admin");
+        navigate("/adminDashboard"); // Navigate to employee dashboard
+      }
       else 
       {
         console.log("No permissions available.");

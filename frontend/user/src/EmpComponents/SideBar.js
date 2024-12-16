@@ -84,13 +84,13 @@ const NAVIGATION = [
     icon: <AnalyticsIcon />,
     children: [
       {
-        segment: 'Summary',
+        segment: 'Attendance Summary Report',
         title: (<Link to="/empDashboard/Summary" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><SummarizeIcon style={{ marginRight: 18 }} />Summary </Link>),
       },
-      {
-        segment: 'AttendanceChart',
-        title: (<Link to="/empDashboard/AttendanceChart" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><ShowChartIcon style={{ marginRight: 18 }} />AttendanceChart </Link>),
-      },
+      // {
+      //   segment: 'AttendanceChart',
+      //   title: (<Link to="/empDashboard/AttendanceChart" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><ShowChartIcon style={{ marginRight: 18 }} />AttendanceChart </Link>),
+      // },
       {
         segment: 'AverageAttendanceReport',
         title: (<Link to="/empDashboard/AverageAttendanceReport" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><BarChartIcon style={{ marginRight: 18 }} />AverageAttendanceReport </Link>),

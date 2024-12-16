@@ -66,34 +66,37 @@ const Profile = () =>
       {/* Buttons for Library and LMS Access */}
       <div style={{ marginTop: '15px', display: 'flex', gap: '10px' }}>
       <Button
-        variant="contained"
-        color="primary"
-        component={Link}
-        to="/library-access"
-        style={{
-          backgroundColor: '#e97100',
-          padding: '22px 24px', 
-          fontSize: '1.1rem',  
-          width: '200px',    
-        }}
-      >
-        Library
-      </Button>
+  variant="contained"
+  color="primary"
+  href="http://opac.vajirarama.lk/cgi-bin/koha/opac-user.pl?has-search-query="
+  target="_blank" // Opens the link in a new tab
+  rel="noopener noreferrer" // Improves security for external links
+  style={{
+    backgroundColor: '#0074e9',
+    padding: '22px 14px',
+    fontSize: '1.1rem',
+    width: '200px',
+  }}
+>
+  Library
+</Button>
 
       <Button
-        variant="contained"
-        color="secondary"
-        component={Link}
-        to="/lms-access"
-        style={{
-          backgroundColor: '#0074e9',
-          padding: '22px 14px', 
-          fontSize: '1.1rem', 
-          width: '200px', 
-        }}
-      >
-      Dhamma School
-      </Button>
+  variant="contained"
+  color="secondary"
+  href="https://ab56-192-248-22-102.ngrok-free.app/"
+  target="_blank" // Opens the link in a new tab
+  rel="noopener noreferrer" // Improves security for external links
+  style={{
+    backgroundColor: '#0074e9',
+    padding: '22px 14px',
+    fontSize: '1.1rem',
+    width: '200px',
+  }}
+>
+  Dhamma School
+</Button>
+
       </div>
     </div>
   );
