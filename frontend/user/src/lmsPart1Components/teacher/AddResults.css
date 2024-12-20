@@ -1,0 +1,113 @@
+/* Container adjustments */
+.results-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    font-size: 18px; /* Increase base font size */
+  }
+  
+  .results-header h2 {
+    font-size: 32px; /* Larger title */
+    margin-bottom: 20px;
+  }
+  
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .filters div {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .filters label {
+    font-size: 20px; /* Larger labels */
+    margin-bottom: 5px;
+  }
+  
+  .filters select {
+    font-size: 18px;
+    padding: 8px;
+  }
+  
+  .fetch-button {
+    padding: 10px 15px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .fetch-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Table adjustments */
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 18px; /* Larger text in table */
+  }
+  
+  .results-table th, 
+  .results-table td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: center;
+  }
+  
+  .results-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  .results-table td select {
+    font-size: 18px;
+    padding: 5px;
+    width: 100px;
+  }
+  
+  .results-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .lock-button {
+    background: none;
+    border: none;
+    font-size: 22px; /* Increase icon size */
+    cursor: pointer;
+    color: #555;
+  }
+  
+  .lock-button:hover {
+    color: #000;
+  }
+  
+  .lock-button:disabled {
+    cursor: not-allowed;
+    color: #aaa;
+  }
+  
+  .save-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 15px; /* Larger button */
+    font-size: 18px; /* Larger text */
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .save-button:hover {
+    background-color: #45a049;
+  }
+  
