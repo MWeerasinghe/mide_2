@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./TeacherDashboard.css";
 
 const TeacherDashboard = () => {
@@ -8,33 +9,90 @@ const TeacherDashboard = () => {
   const [subject, setSubject] = useState("");
   const [file, setFile] = useState(null);
 
-  const years = ["2023", "2024"];
-  const grades = ["6", "7", "8", "9", "10", "11"];
-  const terms = ["1st Term", "2nd Term", "3rd Term"];
-  const subjects = ["Mathematics", "Science", "English", "History", "Geography"];
+  const [uniqueYears, setUniqueYears] = useState([]);
+  const [uniqueGrades, setUniqueGrades] = useState([]);
+  const [uniqueTerms, setUniqueTerms] = useState([]);
+  const [uniqueSubjects, setUniqueSubjects] = useState([]);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+  const subjectMapping = {
+    a: "අභිධර්මය",
+    b: "බුද්ධ චරිතය",
+    p: "පාලි",
   };
 
-  const handleUpload = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user_id = 1;
+        const response = await axios.get(`http://localhost:3000/api/teachers/getTeacher`, { params: { user_id } });
+        const { data } = response.data;
+
+        const years = [...new Set(data.map((item) => item.year))];
+        const grades = [...new Set(data.map((item) => item.grade))];
+        const terms = [...new Set(data.map((item) => item.term))];
+        const subjects = [...new Set(data.map((item) => item.subject))];
+
+        setUniqueYears(years);
+        setUniqueGrades(grades);
+        setUniqueTerms(terms);
+        setUniqueSubjects(subjects);
+      } catch (error) {
+        console.error("Error fetching teacher data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile && selectedFile.type !== "application/pdf") {
+      alert("Please upload a PDF file.");
+      return;
+    }
+    setFile(selectedFile);
+  };
+
+  const handleUpload = async () => {
+    const confirmation = window.confirm("Are you sure you want to upload this material?");
+    if (!confirmation) return;
+
     if (!year || !grade || !term || !subject || !file) {
       alert("Please fill all the fields and select a file.");
       return;
     }
 
-    // Simulate an upload process
-    console.log("Uploading material...");
-    console.log({
-      year,
-      grade,
-      term,
-      subject,
-      fileName: file.name,
-    });
+    try {
+      const user_id = 1;
 
-    alert(`Material "${file.name}" uploaded successfully!`);
-    setFile(null); // Clear the file input after upload
+      const formData = new FormData();
+      formData.append("user_id", user_id);
+      formData.append("year", year);
+      formData.append("grade", grade);
+      formData.append("term", term);
+      formData.append("subject", subject);
+      formData.append("file", file);
+
+      const response = await axios.post(
+        "http://localhost:3000/api/teachers/uploadMaterials",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      if (response.data.success) {
+        alert(`Material "${file.name}" uploaded successfully!`);
+        setYear("");
+        setGrade("");
+        setTerm("");
+        setSubject("");
+        setFile(null);
+      } else {
+        alert("Failed to upload the material. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading material:", error);
+      alert("An error occurred while uploading the material. Please try again.");
+    }
   };
 
   return (
@@ -46,7 +104,7 @@ const TeacherDashboard = () => {
             <label>Year</label>
             <select value={year} onChange={(e) => setYear(e.target.value)}>
               <option value="">Select Year</option>
-              {years.map((y) => (
+              {uniqueYears.map((y) => (
                 <option key={y} value={y}>
                   {y}
                 </option>
@@ -57,7 +115,7 @@ const TeacherDashboard = () => {
             <label>Grade</label>
             <select value={grade} onChange={(e) => setGrade(e.target.value)}>
               <option value="">Select Grade</option>
-              {grades.map((g) => (
+              {uniqueGrades.map((g) => (
                 <option key={g} value={g}>
                   {g}
                 </option>
@@ -68,9 +126,9 @@ const TeacherDashboard = () => {
             <label>Term</label>
             <select value={term} onChange={(e) => setTerm(e.target.value)}>
               <option value="">Select Term</option>
-              {terms.map((t) => (
+              {uniqueTerms.map((t) => (
                 <option key={t} value={t}>
-                  {t}
+                  {`Term ${t}`}
                 </option>
               ))}
             </select>
@@ -79,18 +137,23 @@ const TeacherDashboard = () => {
             <label>Subject</label>
             <select value={subject} onChange={(e) => setSubject(e.target.value)}>
               <option value="">Select Subject</option>
-              {subjects.map((s) => (
+              {uniqueSubjects.map((s) => (
                 <option key={s} value={s}>
-                  {s}
+                  {subjectMapping[s]}
                 </option>
               ))}
             </select>
           </div>
           <div className="form-group">
             <label>Upload Material</label>
-            <input type="file" accept="application/pdf" onChange={handleFileChange} />
+            <input type="file" accept="application/pdf" onChange={handleFileChange} key={file ? file.name : ""} />
           </div>
-          <button type="button" onClick={handleUpload} className="upload-button">
+          <button
+            type="button"
+            onClick={handleUpload}
+            className="upload-button"
+            disabled={!year || !grade || !term || !subject || !file}
+          >
             Upload Material
           </button>
         </form>
