@@ -8,8 +8,8 @@ const { ValidateRegister } = require('../Validates/userValidate')
 const router = express.Router();
 const sequelize = require('../models/sequelize');
 const multer = require('multer');
-
-
+const fs = require('fs');
+const path = require('path');
 
 
 //__________________get All Teachers_____________________
@@ -315,5 +315,73 @@ router.post('/setStudentAttendance', async (req, res) =>
             });
         }    
     });
+    
+
+//_____________Add announcements________________________________
+router.post('/addAnnouncement', async (req, res) => 
+{
+    try
+    {
+        const {user_id, year, grade, subject, date, announcement} = req.body;
+        // Validate required fields
+        if (!user_id || !year || !grade || !subject || !date || !announcement)
+        {
+            return res.status(400).json({ success: false, message: "All fields are required." });
+        }
+
+        const table = "announcement";
+        const query = `
+        INSERT INTO ${table}
+        (user_id, year, grade, subject, announce, date)
+        VALUES
+        (:user_id, :year, :grade, :subject, :announcement, :date)
+        `;
+
+        // Execute the query
+        const result = await sequelize.query(query, { 
+            replacements: { user_id, year, grade, subject, announcement, date },
+            type: sequelize.QueryTypes.INSERT 
+        });
+
+        res.status(200).json({ success: true, message: "Announcement saved successfully.", data: result });
+    }
+    catch (error)
+    {
+        res.status(500).json({ success: false, message: "An error occurred while saving the announcement.", error: error.message });
+    }
+});
+
+
+//________________________open pdf_____________________________
+router.get('/openpdf/:fileName', async (req, res) => {
+    try {
+        const { fileName } = req.params;
+
+        if (!fileName) 
+        {
+            return res.status(400).json({ success: false, message: "File name is required." });
+        }
+
+        const resourceDir = path.join(__dirname, '../resources');
+
+        const filePath = path.join(resourceDir, fileName);
+
+        if (!fs.existsSync(filePath)) 
+        {
+            return res.status(404).json({ success: false, message: "File not found." });
+        }
+
+        // Send the file as a response
+        res.sendFile(filePath, (err) => {
+            if (err) {
+                console.error("Error sending file:", err);
+                res.status(500).json({ success: false, message: "Error serving the file." });
+            }
+        });
+    } catch (error) {
+        console.error("Error in /students/:fileName:", error);
+        res.status(500).json({ success: false, message: "An error occurred.", error: error.message });
+    }
+});
     
 module.exports = router;
