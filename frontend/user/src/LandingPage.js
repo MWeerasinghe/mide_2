@@ -89,9 +89,9 @@ export default function LandingPage() {
         <Route path="/" element={<Hero />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<Registration />} />
-        <Route path="/register/open-membership" element={<OpenMembership />} />
+        <Route path="/register/-membopenership" element={<OpenMembership />} />
         <Route path="/register/student-membership" element={<StudentMembership />} />
-        <Route path="/register/bhikku-membership" element={<BhikkuMembership />} />
+        <Route path="/register/teacher-membership" element={<BhikkuMembership />} />
         <Route path="/register/library-staff" element={<LibraryStaffRegistration />} />
         <Route path="/register/dhamma-school-student" element={<DhammaSchoolRegistration />} />
       </Routes>
