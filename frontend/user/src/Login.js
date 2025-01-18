@@ -25,7 +25,6 @@ const Login = ({ setUserType }) => {
       localStorage.setItem("vajira_token", token);
       const token1 = localStorage.getItem("vajira_token");
       const id = getUserIdFromToken();
-
       if (!id) 
       {
         window.alert("Please login first");
@@ -35,33 +34,27 @@ const Login = ({ setUserType }) => {
       const permissionData = await axios.get(`http://localhost:3000/api/user/user/${id}`, { headers: { Authorization: `Bearer ${token1}` }, });
       const data = permissionData.data.data;
 
-      if (data.libMemberOpen || data.libMemberStudent || data.libMemberThero || data.dhamStudent || data.libStaff) 
+      // if(data.libMemberOpen || data.libMemberStudent || data.libMemberThero || data.dhamStudent || data.libStaff) 
+      if(data.dhamStudent) 
       {
-        setUserType("user"); // Update user type in App.js
-        console.log("User type set to: user");
-        navigate("/dashboard"); // Navigate to user dashboard
+        navigate("/lms"); // Navigate to user dashboard
       } 
-      else if(data.dhamStaff || data.dhamTeacher) 
+      else if(data.dhamTeacher) 
       {
-        setUserType("employee"); // Update user type in App.js
-        console.log("User type set to: employee");
         navigate("/empDashboard"); // Navigate to employee dashboard
       } 
       else if(data.admin) 
       {
-        setUserType("admin"); // Update user type in App.js
-        console.log("User type set to: admin");
         navigate("/adminDashboard"); // Navigate to employee dashboard
       }
       else 
       {
-        console.log("No permissions available.");
         alert("No permissions available.");
       }
     } 
     catch (err) 
     {
-      const errorMessage = err.response?.data?.message || "An error occurred.";
+      const errorMessage = err.response?.data?.message || "An error occurred...";
       setError(errorMessage); // Set error message
     } finally {
       setLoading(false); // Stop loading
