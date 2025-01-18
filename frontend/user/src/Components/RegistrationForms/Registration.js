@@ -21,7 +21,7 @@ const LibraryMembership = () => {
           }}
         >
             <Typography component="h5" variant="h5">
-                Dhamma School Student Registration
+                Dhamma School Registration
             </Typography>
 
             <NavLink to="/register/dhamma-school-student">
@@ -33,6 +33,17 @@ const LibraryMembership = () => {
                         Register as Dhamma School Student
                 </Button>
             </NavLink>
+
+            <NavLink to="/register/teacher-membership">
+                <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3}}
+                    >
+                        Register as Dhamma School Teacher
+                </Button>
+            </NavLink>
+            
         </Box>
 
         <Box
@@ -64,16 +75,6 @@ const LibraryMembership = () => {
                     sx={{ mt: 3}}
                     >
                         Apply for Student Membership
-                </Button>
-            </NavLink>
-
-            <NavLink to="/register/bhikku-membership">
-                <Button
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3}}
-                    >
-                        Apply for Bhikku Membership
                 </Button>
             </NavLink>
         </Box>

@@ -153,7 +153,7 @@ function AppAppBar({ mode, toggleColorMode }) {
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
 
-              <NavLink to="/login">
+              <NavLink to="/signin">
                 <Button
                   color="primary"
                   variant="text"

@@ -7,6 +7,7 @@ import downloadImage from '../../assets/download.png';
 import CoursesAdd from './courses';
 import AttendanceMark from './attendanceMark';
 import AddResults from './addResult';
+import Announcement from './addAnnouncement';
 
 
 
@@ -126,7 +127,7 @@ const NAVIGATION = [
   {
     segment: 'dashboard',
     title: (
-      <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      <Link to="/teacherLms/announcement" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
         Announcement
       </Link>
     ),
@@ -218,6 +219,7 @@ export default function DashboardLayoutBasic(props)
             <Route path="/addResult" element={<AddResults />} />
             <Route path="/attendanceMark" element={<AttendanceMark />} />
             <Route path="/addCourse" element={<CoursesAdd />} />
+            <Route path="/announcement" element={<Announcement />} />
           </Routes>
         </PageContainer>
       </DashboardLayout>

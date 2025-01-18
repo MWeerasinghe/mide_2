@@ -39,12 +39,11 @@ const AttendanceMarkingWithLock = () => {
           term2: student.t2_attend,
           term3: student.t3_attend,
           locks: { term1: true, term2: true, term3: true },
-          updated: { term1: false, term2: false, term3: false },
+          hasChanged: { term1: false, term2: false, term3: false },
         }));
 
         setStudents(studentsData);
-        setOriginalData(studentsData); // Keep a backup for reset functionality
-        console.log("Fetched Students Data:", studentsData);
+        setOriginalData(studentsData);
       } else {
         alert("No data found for the selected criteria.");
       }
@@ -66,13 +65,17 @@ const AttendanceMarkingWithLock = () => {
     );
   };
 
-  const handleAttendanceChange = (id, term, value) => {
+  const handleAttendanceChange = (studentId, term, change) => {
     setStudents((prevStudents) =>
       prevStudents.map((student) =>
-        student.id === id
+        student.id === studentId && !student.hasChanged[term]
           ? {
               ...student,
-              [term]: Math.max(0, student[term] + value),
+              [term]: student[term] + change,
+              hasChanged: {
+                ...student.hasChanged,
+                [term]: true,
+              },
             }
           : student
       )
@@ -83,7 +86,10 @@ const AttendanceMarkingWithLock = () => {
     setStudents((prevStudents) =>
       prevStudents.map((student) =>
         student.id === id
-          ? { ...originalData.find((origStudent) => origStudent.id === id) }
+          ? {
+              ...originalData.find((origStudent) => origStudent.id === id),
+              hasChanged: { term1: false, term2: false, term3: false },
+            }
           : student
       )
     );
@@ -91,10 +97,8 @@ const AttendanceMarkingWithLock = () => {
 
   const saveAttendance = async (id) => {
     const student = students.find((s) => s.id === id);
-    console.log("Saving Attendance for Student:", student);
 
     try {
-      alert("hhhhhhhh");
       await axios.post("http://localhost:3000/api/teachers/setStudentAttendance", {
         id: student.id,
         subject: subject,
@@ -102,13 +106,12 @@ const AttendanceMarkingWithLock = () => {
         term2: student.term2,
         term3: student.term3,
       });
-      alert("fffffffffff");
 
       alert(`Attendance for ${student.name} saved successfully.`);
       setStudents((prevStudents) =>
         prevStudents.map((student) =>
           student.id === id
-            ? { ...student, updated: { term1: false, term2: false, term3: false } }
+            ? { ...student, hasChanged: { term1: false, term2: false, term3: false } }
             : student
         )
       );
@@ -184,14 +187,14 @@ const AttendanceMarkingWithLock = () => {
                   <td key={`${student.id}-${term}`}>
                     <div className="attendance-counter">
                       <button
-                        disabled={student.locks[term]}
+                        disabled={student.locks[term] || student.hasChanged[term]}
                         onClick={() => handleAttendanceChange(student.id, term, -1)}
                       >
                         -
                       </button>
                       <span>{student[term]}</span>
                       <button
-                        disabled={student.locks[term]}
+                        disabled={student.locks[term] || student.hasChanged[term]}
                         onClick={() => handleAttendanceChange(student.id, term, 1)}
                       >
                         +

@@ -7,6 +7,7 @@ const { Teacher6 } = require('../models/teacher_6');
 const { ValidateRegister } = require('../Validates/userValidate')
 const router = express.Router();
 const sequelize = require('../models/sequelize');
+const { route } = require('./teacherController');
 
 
 
@@ -44,7 +45,7 @@ router.get('/getAbhidharmaDetails/:user_id', async (req, res) =>
     {
         const user_id = req.params.user_id;
         const query = `SELECT * FROM abhidharmaya WHERE user_id = :user_id`;
-        const [buddha] = await sequelize.query(query, { replacements: { user_id }, type: sequelize.QueryTypes.SELECT});
+        const buddha = await sequelize.query(query, { replacements: { user_id }, type: sequelize.QueryTypes.SELECT});
 
         if(buddha)
         {
@@ -69,7 +70,7 @@ router.get('/getPaliaDetails/:user_id', async (req, res) =>
     {
         const user_id = req.params.user_id;
         const query = `SELECT * FROM pali WHERE user_id = :user_id`;
-        const [buddha, metadata] = await sequelize.query(query, { replacements: { user_id }, type: sequelize.QueryTypes.SELECT});
+        const buddha = await sequelize.query(query, { replacements: { user_id }, type: sequelize.QueryTypes.SELECT});
 
         if(buddha)
         {
@@ -131,5 +132,71 @@ router.post('/getMaterials', async (req, res) =>
     }
 });
 
+//_________________get buddha charithaya ANNOUNCEMENTS_________________________________
+router.get('/getAnnouncements', async (req, res) => {
+    try 
+    {
+      const { year, grade, subject } = req.query;
+  
+      if(!year || !grade || !subject) 
+      {
+        return res.status(400).json({ message: 'Year, grade, and subject are required.' });
+      }
+  
+      const query = `SELECT * FROM announcement WHERE subject = :subject AND grade = :grade AND year = :year`;
+  
+      const result = await sequelize.query(query, {replacements: { subject, grade, year }, type: sequelize.QueryTypes.SELECT });
+      if(result.length > 0)
+        {
+            await Promise.all(
+                result.map(async (record) => 
+                {
+                  const user = await sequelize.query('SELECT name, email FROM "Users" WHERE id = :user_id', { replacements: { user_id: record.user_id }, type: sequelize.QueryTypes.SELECT });
+                  record.name = user.length > 0 ? user[0].name : "Unknown";
+                  record.email = user.length > 0 ? user[0].email : "Unknown";
+                })
+              );
+            return res.status(200).json({ success: true, data: result });
+        }
+        return res.status(200).json({ success: false });
+    } 
+    catch (error) 
+    {
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
+  
+
+
+// ___________________test__________________________
+// const bcrypt = require('bcrypt');
+
+router.post('/save', async (req, res) => {
+    try {
+        const { fullName, email, password } = req.body;
+
+        // Basic validation
+        if (!fullName || !email || !password) {
+            return res.status(400).json({ success: false, message: "All fields are required" });
+        }
+
+        // Hash the password
+        // const hashedPassword = await bcrypt.hash(password, 10);
+
+        const table = "test";
+        const query = `INSERT INTO ${table} (fullName, email, password) VALUES (:fullName, :email, :password)`;
+
+        // Execute the query
+        const result = await sequelize.query(query, { 
+            replacements: { fullName, email, password },
+            type: sequelize.QueryTypes.INSERT });
+
+        res.status(200).json({ success: true, message: "Data saved successfully.", data: result });
+    } 
+    catch (error) {
+        console.error('Error occurred during save operation:', error);  // Log the error for debugging
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
 
 module.exports = router;

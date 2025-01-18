@@ -24,7 +24,7 @@ router.get('/user/all', async (req, res) => {
 const checkUserExistsQuery = `
   SELECT COUNT(*) AS count
   FROM dham_student
-  WHERE user_id = :user_id
+  WHERE id = :user_id
 `;
 
 const checkAttendanceExistsQuery = `
@@ -36,12 +36,6 @@ const checkAttendanceExistsQuery = `
 const insertAttendanceQuery = `
   INSERT INTO attendance_marking (user_id, date, time)
   VALUES (:user_id, :date, :time)
-`;
-
-const getUserDetailsQuery = `
-  SELECT *
-  FROM dham_student
-  WHERE user_id = :user_id
 `;
 
 router.post('/mark', async (req, res) => {
@@ -78,22 +72,12 @@ router.post('/mark', async (req, res) => {
       type: sequelize.QueryTypes.INSERT,
     });
 
-    // Fetch user details
-    const [userDetails] = await sequelize.query(getUserDetailsQuery, {
-      replacements: { user_id },
-      type: sequelize.QueryTypes.SELECT,
-    });
-
-    return res.status(201).json({
-      message: 'Attendance marked successfully',
-      user: userDetails,
-    });
+    return res.status(201).json({ message: 'Attendance marked successfully' });
   } catch (error) {
     console.error('Error processing attendance:', error);
     return res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
-
 
 
 

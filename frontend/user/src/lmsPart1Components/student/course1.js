@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const FirstCourse = () => {
   const [studeData, setStuData] = useState([]);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [materials, setMaterials] = useState([]);
+  const navigate = useNavigate();
+  const sub = 'b';
 
 
   // Dummy Data for Course Materials
@@ -53,46 +56,34 @@ const FirstCourse = () => {
 
 
   useEffect(() => {
-    const fetchLectures = async () => {
-      if (studeData.length > 0 && selectedYear) 
-      {
-        const year1 = selectedYear;
-        const grade1 = studeData[0].grade
-        const year = "2028";
-        const grade = "6";
-        const subject = "b";
-  
-        console.log("Fetching materials for year:", year, "Grade:", grade, "Subject:", subject);
-  
-        try 
-        {
-          console.log("before");
-          const result = await axios.post("http://localhost:3000/api/students/getMaterials", { year, grade, subject });
-          console.log("after", result);
+    const fetchMaterials = async () => {
+      if (studeData.length > 0 && selectedYear) {
+        const grade = studeData[0].grade;
+        const year = selectedYear.toString();
+        const subject = sub;
 
-          if(result) 
-          {
+        try {
+          const result = await axios.post('http://localhost:3000/api/students/getMaterials', { year, grade, subject });
+          if (result.data.success === true) {
             setMaterials(result.data.data);
-            console.log("Fetched materials:", result.data.data);
-          } 
-          else 
-          {
-            console.error("Failed to fetch materials: Invalid response format");
+            console.log('Fetched materials:', result.data.data);
+          } else {
+            console.log('No data found:', result.data.message);
           }
-        } 
-        catch (error) 
-        {
-          console.error("Error fetching materials:", error);
+        } catch (error) {
+          if (error.response) {
+            console.log('Error response:', error.response.data.message || 'Unknown error occurred');
+          } else if (error.request) {
+            console.log('No response received:', error.request);
+          } else {
+            console.log('Error during request setup:', error.message);
+          }
         }
-      } 
-      else 
-      {
-        console.log("Data is not available yet. studeData or selectedYear is missing.");
       }
     };
-  
-    fetchLectures();
+    fetchMaterials();
   }, [studeData, selectedYear]);
+  
   
   
   
@@ -135,8 +126,38 @@ const FirstCourse = () => {
             </option>
           ))}
         </select>
-        <h4>Grade: {selectedYearData !== null ? selectedYearData.grade : 'N/A'}</h4>
+        <div className="abc" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px' }}>
+          <h4 style={{ margin: 0 }}>Grade: {selectedYearData !== null ? selectedYearData.grade : 'N/A'}</h4>
+
+          {/* Button to Fetch Announcements */}
+          <button
+            style={{
+              padding: '10px 20px',
+              fontSize: '16px',
+              backgroundColor: '#2ecc71',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s',
+            }}
+            onMouseOver={(e) => (e.target.style.backgroundColor = '#27ae60')}
+            onMouseOut={(e) => (e.target.style.backgroundColor = '#2ecc71')}
+            onClick={() =>
+              navigate('/lms/announcements', {
+                state: { selectedYear, studeData, sub }, // Pass data as state
+              })
+            }
+          >
+            Get Announcements
+          </button>
+
+        </div>
+
       </div>
+
+
+
 
       {/* Results and Attendance */}
       {selectedYearData ? (
@@ -190,56 +211,52 @@ const FirstCourse = () => {
           }}
         >
           <h2 style={{ textAlign: 'center', color: '#6c5ce7', fontSize: '24px', marginBottom: '20px' }}>
-            Course Materials
+              Course Materials
           </h2>
-          {dummyMaterials[selectedYear] ? (
-            Object.entries(dummyMaterials[selectedYear]).map(([term, materials], index) => (
-              <div key={index} style={{ marginBottom: '15px' }}>
-                <h3
-                  style={{
-                    color: '#2d3436',
-                    fontSize: '18px',
-                    borderBottom: '2px solid #dfe6e9',
-                    paddingBottom: '5px',
-                    marginBottom: '10px',
-                  }}
-                >
-                  {term.replace(/term/i, 'Term ')}:
-                </h3>
-                <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-                  {materials.map((material, i) => (
-                    <li
-                      key={i}
-                      style={{
-                        padding: '8px 0',
-                        borderBottom: '1px solid #dfe6e9',
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <a href="#"
-                        style={{
-                          color: '#0984e3',
-                          textDecoration: 'none',
-                          fontWeight: '500',
-                          fontSize: '16px',
-                          marginRight: '10px',
-                        }}
-                      >
-                        {material}
-                      </a>
-                      <span style={{ color: '#636e72', fontSize: '14px' }}>(PDF)</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          ) : (
-            <p style={{ textAlign: 'center', color: '#b2bec3', fontSize: '16px' }}>
-              No course materials available for {selectedYear}.
-            </p>
-          )}
-        </div>
+            {materials.length > 0 ? (
+              ['Term 1', 'Term 2', 'Term 3'].map((term) => (
+                <div key={term} style={{ marginBottom: '30px' }}>
+                  <h2
+                    style={{
+                      color: '#2d3436',
+                      fontSize: '20px',
+                      borderBottom: '3px solid #b2bec3',
+                      paddingBottom: '8px',
+                      marginBottom: '15px',
+                    }}
+                  >
+                    {term}
+                  </h2>
+                  {materials
+                    .filter((material) => `Term ${material.term}` === term)
+                    .map((material) => {
+                      const fileType = material.note.split('.').pop().toUpperCase();
+                      return (
+                        <div key={material.id} style={{ marginBottom: '15px' }}>
+                          <a
+                            href={`http://localhost:3000/api/teachers/openpdf/${encodeURIComponent(material.note)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: '#0984e3',
+                              textDecoration: 'none',
+                              fontWeight: '500',
+                              fontSize: '16px',
+                            }}
+                          >
+                            {material.note} ({fileType})
+                          </a>
+                        </div>
+                      );
+                    })
+                    }
+                  </div>
+                ))
+              ) : (
+              <p style={{ textAlign: 'center', color: '#636e72' }}>No materials available for the selected year.</p>
+            )}
+
+          </div>
 
         </div>
       ) : (
