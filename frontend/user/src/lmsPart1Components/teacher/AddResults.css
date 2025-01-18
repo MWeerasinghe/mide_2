@@ -5,9 +5,10 @@
     font-size: 18px; /* Increase base font size */
   }
   
-  .results-header h2 {
-    font-size: 32px; /* Larger title */
+  .results-header h3 {
+    font-size: 25px; /* Larger title */
     margin-bottom: 20px;
+    text-align: center;
   }
   
   .filters {
@@ -33,8 +34,11 @@
   }
   
   .fetch-button {
-    padding: 10px 15px;
-    font-size: 18px;
+    margin-top: 26%;
+    padding: 10px 10px;
+    width: 130px;
+    height: 40px;
+    font-size: 15px;
     background-color: #007bff;
     color: white;
     border: none;

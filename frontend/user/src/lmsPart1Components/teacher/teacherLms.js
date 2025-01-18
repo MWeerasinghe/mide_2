@@ -150,8 +150,7 @@ const NAVIGATION = [
     segment: 'logout',
     title: <Link to="/dashboard/logout" style={{
       textDecoration: 'none',
-      color: '#FFFFFF', 
-      fontWeight: 'bold',
+      color: 'inherit', 
       fontSize: '16px',
       padding: '4px 8px',
       borderRadius: '4px',
