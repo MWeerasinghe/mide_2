@@ -14,6 +14,7 @@ import BhikkuMembership from './Components/RegistrationForms/BhikkuMembership';
 import LibraryStaffRegistration from './Components/RegistrationForms/LibraryStaffRegistration';
 import DhammaSchoolRegistration from './Components/RegistrationForms/DhammaSchoolRegistration';
 import LandingPage from './LandingPage';
+import AdminLand from './adminComponents/SideBar'
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
         <LandingPage />
         <Routes>
           <Route path="/login" element={<Login />} />
+          
+          <Route path="/admin/*" element={<AdminLand />} />
           <Route path="/lms/*" element={<MyCoursesApp />} />
           <Route path="/teacherLms/*" element={<TeacherLms />} />
         </Routes>
