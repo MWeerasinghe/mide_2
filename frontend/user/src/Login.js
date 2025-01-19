@@ -41,7 +41,7 @@ const Login = ({ setUserType }) => {
       } 
       else if(data.dhamTeacher) 
       {
-        navigate("/empDashboard"); // Navigate to employee dashboard
+        navigate("/teacherLms"); // Navigate to employee dashboard
       } 
       else if(data.admin) 
       {

@@ -39,18 +39,18 @@ const NAVIGATION = [
     children: [
       {
         segment: 'sales',
-        title: (<Link to="/adminDashboard/student-register-requests" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><DescriptionIcon style={{ marginRight: 18 }} />Student Membership </Link>),
+        title: (<Link to="/admin/student-register-requests" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><DescriptionIcon style={{ marginRight: 18 }} />Student Membership </Link>),
       },
       {
         segment: 'traffic',
-        title: (<Link to="/adminDashboard/bhikku-register-requests" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><DescriptionIcon style={{ marginRight: 18 }} />Bhikku Membership</Link>),
+        title: (<Link to="/admin/bhikku-register-requests" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><DescriptionIcon style={{ marginRight: 18 }} />Teacher Membership</Link>),
       },
-      {
-        segment: 'lms_library',
-        title: (
-          <Link to="/adminDashboard/open-member-register-requests" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}> <DescriptionIcon style={{ marginRight: 20 }} /> Open Membership </Link>
-        ),
-      },
+      // {
+      //   segment: 'lms_library',
+      //   title: (
+      //     <Link to="/adminDashboard/open-member-register-requests" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}> <DescriptionIcon style={{ marginRight: 20 }} /> Open Membership </Link>
+      //   ),
+      // },
     ],
   },
   {

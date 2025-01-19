@@ -27,47 +27,53 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event) => 
+  {
     event.preventDefault();
     setError(null);
     setLoading(true);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        { email, password },
-        { headers: { "Content-Type": "application/json" } }
-      );
+    try 
+    {
+      const response = await axios.post("http://localhost:3000/api/auth/login",{ email, password },{ headers: { "Content-Type": "application/json" } });
 
       const { token } = response.data;
       localStorage.setItem("vajira_token", token);
       const id = getUserIdFromToken(); // Use imported function to get the user ID
-
-      if (!id) {
+      if (!id) 
+      {
         window.alert("Please login first");
         return;
       }
 
-      const permissionResponse = await axios.get(
-        `http://localhost:3000/api/user/user/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+
+      const permissionResponse = await axios.get(`http://localhost:3000/api/user/user/${id}`,{ headers: { Authorization: `Bearer ${token}` } });
 
       const userData = permissionResponse.data.data;
 
-      if (userData.dhamStudent) {
+      if (userData.dhamStudent) 
+      {
         navigate("/lms");
-      } else if (userData.dhamTeacher) {
-        navigate("/empDashboard");
-      } else if (userData.admin) {
-        navigate("/adminDashboard");
-      } else {
+      } 
+      else if (userData.dhamTeacher) 
+      {
+        navigate("/teacherLms");
+      } 
+      else if (userData.admin) 
+      {
+        navigate("/admin");
+      } 
+      else 
+      {
         alert("No permissions available.");
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       const errorMessage = err.response?.data?.message || "An error occurred...";
       setError(errorMessage);
-    } finally {
+    } 
+    finally {
       setLoading(false);
     }
   };
