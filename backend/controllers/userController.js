@@ -171,21 +171,20 @@ router.get('/user/:id', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Fetch related data using raw queries
-        const libMemberOpen = await sequelize.query(libMemberOpenQuery, {
-            replacements: { userId: id },
-            type: sequelize.QueryTypes.SELECT,
-        });
+        // const libMemberOpen = await sequelize.query(libMemberOpenQuery, {
+        //     replacements: { userId: id },
+        //     type: sequelize.QueryTypes.SELECT,
+        // });
 
-        const libMemberStudent = await sequelize.query(libMemberStudentQuery, {
-            replacements: { userId: id },
-            type: sequelize.QueryTypes.SELECT,
-        });
+        // const libMemberStudent = await sequelize.query(libMemberStudentQuery, {
+        //     replacements: { userId: id },
+        //     type: sequelize.QueryTypes.SELECT,
+        // });
 
-        const libMemberThero = await sequelize.query(libMemberTheroQuery, {
-            replacements: { userId: id },
-            type: sequelize.QueryTypes.SELECT,
-        });
+        // const libMemberThero = await sequelize.query(libMemberTheroQuery, {
+        //     replacements: { userId: id },
+        //     type: sequelize.QueryTypes.SELECT,
+        // });
 
         const dhamStudent = await sequelize.query(dhamStudentQuery, {
             replacements: { userId: id },
@@ -197,32 +196,32 @@ router.get('/user/:id', async (req, res) => {
             type: sequelize.QueryTypes.SELECT,
         });
 
-        const dhamStaff = await sequelize.query(dhamStaffQuery, {
-            replacements: { userId: id },
-            type: sequelize.QueryTypes.SELECT,
-        });
+        // const dhamStaff = await sequelize.query(dhamStaffQuery, {
+        //     replacements: { userId: id },
+        //     type: sequelize.QueryTypes.SELECT,
+        // });
 
         const admin = await sequelize.query(adminQuery, {
             replacements: { userId: id },
             type: sequelize.QueryTypes.SELECT,
         });
 
-        const libStaff = await sequelize.query(libStaffQuery, {
-            replacements: { userId: id },
-            type: sequelize.QueryTypes.SELECT,
-        });
+        // const libStaff = await sequelize.query(libStaffQuery, {
+        //     replacements: { userId: id },
+        //     type: sequelize.QueryTypes.SELECT,
+        // });
 
         // Prepare the response
         const responseData = {
             user,
-            libMemberOpen: libMemberOpen.length > 0 ? libMemberOpen[0] : null,
-            libMemberStudent: libMemberStudent.length > 0 ? libMemberStudent[0] : null,
-            libMemberThero: libMemberThero.length > 0 ? libMemberThero[0] : null,
+            // libMemberOpen: libMemberOpen.length > 0 ? libMemberOpen[0] : null,
+            // libMemberStudent: libMemberStudent.length > 0 ? libMemberStudent[0] : null,
+            // libMemberThero: libMemberThero.length > 0 ? libMemberThero[0] : null,
             dhamStudent: dhamStudent.length > 0 ? dhamStudent[0] : null,
             dhamTeacher: dhamTeacher.length > 0 ? dhamTeacher[0] : null,
-            dhamStaff: dhamStaff.length > 0 ? dhamStaff[0] : null,
+            // dhamStaff: dhamStaff.length > 0 ? dhamStaff[0] : null,
             admin: admin.length > 0 ? admin[0] : null,
-            libStaff: libStaff.length > 0 ? libStaff[0] : null,
+            // libStaff: libStaff.length > 0 ? libStaff[0] : null,
         };
 
         return res.status(200).json({ message: 'User found', data: responseData });
