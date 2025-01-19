@@ -5,6 +5,8 @@ const verifyToken = require('../TokenCheck/verifyToken');
 const { User } = require('../models');
 const {ValidateRegister} = require('../Validates/userValidate')
 const router = express.Router();
+const sequelize = require('../models/sequelize');
+const moment = require('moment-timezone');
 
 
 //__________________Register user_____________________
@@ -44,7 +46,244 @@ router.post('/register', async (req, res) =>
 });
 
 
+//________________Form data_______________________________________________________________________________________________________
+router.post('/formRegister', async (req, res) => 
+{
+    const { email, password, landline, gender, nic, dob, address, name, mobile, role, year, grade } = req.body;
 
+    const validationError = ValidateRegister(email, password);
+    if(validationError) 
+    {
+        return res.status(400).json({ message: validationError });
+    }
+
+    try 
+    {
+        const qry = `SELECT * FROM reg_users WHERE email = :email`;
+        const ifUser = await sequelize.query(qry, {
+            replacements: {email},
+            type: sequelize.QueryTypes.SELECT
+        });
+        
+        if(ifUser.length > 0) 
+        {
+            return res.status(400).json({ message: 'Email is already registered', ifUser });
+        }
+    
+        const hashedPassword = await bcrypt.hash(password, 10);
+    
+        const sriLankaTime = moment.tz('Asia/Colombo').format('YYYY-MM-DD HH:mm:ss'); // Get current time in Sri Lanka time zone
+    
+        const table = "reg_users";
+        const qry2 = `
+        INSERT INTO ${table} 
+        (email, password, landline, gender, nic, dob, address, name, mobile, createdat, updatedat, role, year, grade)
+        VALUES
+        (:email, :password, :landline, :gender, :nic, :dob, :address, :name, :mobile, :createdat, :updatedat, :role, :year, :grade)`;
+
+
+        const result = await sequelize.query(qry2, {
+            replacements: {email, password: hashedPassword, landline, gender, nic, dob, address, name, mobile, createdat: sriLankaTime, updatedat: sriLankaTime, role, year, grade},
+            type: sequelize.QueryTypes.INSERT
+        });
+    
+        res.status(201).json({ message: 'User registered successfully', user: { result } });
+    } 
+    catch (error) 
+    {
+        console.error('Registration error:', error);
+
+        if (error.name === 'SequelizeUniqueConstraintError') 
+        {
+            return res.status(400).json({ message: 'Email already exists' });
+        }
+        res.status(400).json({ message: 'Error registering user', error });
+    }
+});
+
+//_________________Get registration form data details(teachers)_________________________________________________________________________
+router.get('/getRegFormTeachers', async (req, res) => 
+{
+    try 
+    {
+        const role = 'teacher';
+        const qry = `SELECT * FROM reg_users WHERE role = :role`;
+        const ifUser = await sequelize.query(qry, { replacements: {role}, type: sequelize.QueryTypes.SELECT });
+
+        if(ifUser.length > 0)
+        {
+            return res.status(200).json({ifUser})
+        }
+        res.status(404).json({ message: 'teachers not found' });
+        
+    } 
+    catch (error) 
+    {
+        console.error('Login error:', error);
+        res.status(400).json({ message: 'Error fetching data', error });
+    }
+});
+
+
+//_________________Get registration form data details(students)___________________________________________________________________
+router.get('/getRegFormStudents', async (req, res) => 
+{
+    try
+    {
+        const role = 'student';
+        const qry = `SELECT * FROM reg_users WHERE role = :role`;
+        const ifUser = await sequelize.query(qry, { replacements: {role}, type: sequelize.QueryTypes.SELECT });
+
+        if(ifUser.length > 0)
+        {
+            return res.status(200).json({ifUser})
+        }
+        res.status(404).json({ message: 'Students not found' });    
+    } 
+    catch (error) 
+    {
+        console.error('Login error:', error);
+        res.status(400).json({ message: 'Error fetching data', error });
+    }
+});
+
+
+//_________________Accept/Reject(teachers)___________________________________________________________________
+router.post('/acceptOrRejectRequestTeachers', async (req, res) => 
+{
+    try
+    {
+        const sriLankaTime = moment.tz('Asia/Colombo').format('YYYY-MM-DD HH:mm:ss');
+        const createdAt = sriLankaTime;
+        const updatedAt = sriLankaTime;
+
+        const {id, action, role, name, email, password, landline, gender, nic, dob, address, mobile, year, grades, term, subjects} = req.body;
+        if(role === 'teacher')
+        {
+            if(action === 'Accepted')
+            {
+                const user = await User.create({ name, email, role, password, landline, gender, nic, dob, address, mobile, createdAt, updatedAt});
+
+                const ifExist = await User.findOne({ where: { email } });
+                const user_id = ifExist.id;
+
+                const qry1 = `INSERT INTO dham_teacher (user_id) VALUES (:user_id)`;
+                const result1 = await sequelize.query(qry1, { replacements: {user_id}, type: sequelize.QueryTypes.INSERT });
+
+                for(const grade of grades)
+                {
+                    for(const subject of subjects)
+                    {
+                        const qry2 = `INSERT INTO assign_teachers (user_id, name, year, grade, term, subject) VALUES (:user_id, :name, :year, :grade, :term, :subject)`;
+                        const result2 = await sequelize.query(qry2, { replacements: {user_id, name, year, grade, term, subject}, type: sequelize.QueryTypes.INSERT });
+                    }
+                }
+
+                const qry3 = `DELETE FROM reg_users WHERE id = :id`;
+                const result3 = await sequelize.query(qry3, { replacements: {id}, type: sequelize.QueryTypes.DELETE });
+
+                return res.status(201).json({success: true, message:'successfully Accepted that applicant'});
+            }
+            else if(action === 'Rejected')
+            {
+                const qry3 = `DELETE FROM reg_users WHERE id = :id`;
+                const result3 = await sequelize.query(qry3, { replacements: {id}, type: sequelize.QueryTypes.DELETE });
+                return res.status(400).json({success: true,  message: 'successfully Rejected that applicant'});
+            }
+            else
+            {
+                return res.status(400).json({success: false, message: 'Not action method'});
+            }
+        }
+        else
+        {
+            return res.status(400).json({success: false , message: 'Not role specified'});
+        }
+    } 
+    catch (error) 
+    {
+        console.error('error manage data:', error);
+        res.status(400).json({ message: 'Error fetching data', error });
+    }
+});
+
+
+//_________________Accept/Reject(students)___________________________________________________________________
+router.post('/acceptOrRejectRequestStudents', async (req, res) => 
+    {
+        try
+        {
+            const sriLankaTime = moment.tz('Asia/Colombo').format('YYYY-MM-DD HH:mm:ss');
+            const createdAt = sriLankaTime;
+            const updatedAt = sriLankaTime;
+    
+            const {id, action, role, name, email, password, landline, gender, nic, dob, address, mobile, year, grade} = req.body;
+            console.log(id, action, role, name, email, password, landline, gender, nic, dob, address, mobile, year, grade);
+            if(role === 'student')
+            {
+                if(action === 'Accepted')
+                {
+                    console.log('aaaaa');
+                    const user = await User.create({ name, email, role, password, landline, gender, nic, dob, address, mobile, createdAt, updatedAt});
+                    console.log('bbbb');
+    
+                    const ifExist = await User.findOne({ where: { email } });
+                    const user_id = ifExist.id;
+                    console.log('cccccc');
+    
+                    const qry1 = `INSERT INTO dham_student (user_id) VALUES (:user_id)`;
+                    const result1 = await sequelize.query(qry1, { replacements: {user_id}, type: sequelize.QueryTypes.INSERT });
+                    console.log('dddddddd');
+    
+                    const t1_result = 'Not yet';
+                    const t2_result = 'Not yet';
+                    const t3_result = 'Not yet';
+                    const t1_attend = '0';
+                    const t2_attend = '0';
+                    const t3_attend = '0';
+
+                    const qry2 = `INSERT INTO pali (user_id, grade, year, t1_result, t2_result, t3_result, t1_attend, t2_attend, t3_attend) VALUES (:user_id, :grade, :year, :t1_result, :t2_result, :t3_result, :t1_attend, :t2_attend, :t3_attend)`;
+                    const qry3 = `INSERT INTO buddha_charithaya (user_id, grade, year, t1_result, t2_result, t3_result, t1_attend, t2_attend, t3_attend) VALUES (:user_id, :grade, :year, :t1_result, :t2_result, :t3_result, :t1_attend, :t2_attend, :t3_attend)`;
+                    const qry4 = `INSERT INTO abhidharmaya (user_id, grade, year, t1_result, t2_result, t3_result, t1_attend, t2_attend, t3_attend) VALUES (:user_id, :grade, :year, :t1_result, :t2_result, :t3_result, :t1_attend, :t2_attend, :t3_attend)`;
+                   
+                    const result2 = await sequelize.query(qry2, { replacements: {user_id, grade, year, t1_result, t2_result, t3_result, t1_attend, t2_attend, t3_attend}, type: sequelize.QueryTypes.INSERT });
+                    const result3 = await sequelize.query(qry3, { replacements: {user_id, grade, year, t1_result, t2_result, t3_result, t1_attend, t2_attend, t3_attend}, type: sequelize.QueryTypes.INSERT });
+                    const result4 = await sequelize.query(qry4, { replacements: {user_id, grade, year, t1_result, t2_result, t3_result, t1_attend, t2_attend, t3_attend}, type: sequelize.QueryTypes.INSERT });
+                    console.log('eeeeeeeee');
+    
+                    const qry5 = `DELETE FROM reg_users WHERE id = :id`;
+                    const result5 = await sequelize.query(qry5, { replacements: {id}, type: sequelize.QueryTypes.DELETE });
+    
+                    return res.status(201).json({success: true, message:'successfully Accepted that applicant'});
+                }
+                else if(action === 'Rejected')
+                {
+                    console.log('ffffffff');
+
+                    const qry3 = `DELETE FROM reg_users WHERE id = :id`;
+                    const result3 = await sequelize.query(qry3, { replacements: {id}, type: sequelize.QueryTypes.DELETE });
+                    return res.status(400).json({success: true,  message: 'successfully Rejected that applicant'});
+                }
+                else
+                {
+                    console.log('gggggggg');
+
+                    return res.status(400).json({message: 'Not action method'});
+                }
+            }
+            else
+            {
+                console.log('hhhhhhhhhh');
+
+                return res.status(400).json({success: false , message: 'Not role specified'});
+            }
+        } 
+        catch (error) 
+        {
+            console.error('error manage data:', error);
+            res.status(400).json({ message: 'Error fetching data', error });
+        }
+    });
 
 //__________________Login user_____________________
 router.post('/login', async (req, res) => 
@@ -62,7 +301,7 @@ router.post('/login', async (req, res) =>
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
             res.json({ message: 'Login successful', token });
         } else {
-            res.status(401).json({ message: 'Invalid email or password' });
+            res.status(401).json({ message: 'Invalid email or password or Not permission yet' });
         }
     } catch (error) {
         console.error('Login error:', error);
