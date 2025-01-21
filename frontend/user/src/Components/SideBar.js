@@ -38,7 +38,7 @@ const NAVIGATION = [
   {
     segment: 'dashboard',
     title: (
-      <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      <Link to="/lms/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
         Dashboard
       </Link>
     ),
@@ -53,7 +53,7 @@ const NAVIGATION = [
       {
         segment: '',
         title: (
-          <Link to="/dashboard/edit-profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/lms/edit-profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <EditIcon style={{ marginRight: 18 }} />
             Edit
           </Link>
@@ -62,7 +62,7 @@ const NAVIGATION = [
       {
         segment: '',
         title: (
-          <Link to="/dashboard/permission" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/lms/permission" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <LockOpenIcon style={{ marginRight: 18 }} />
             Permission
           </Link>
@@ -94,7 +94,7 @@ const NAVIGATION = [
       {
         segment: 'traffic',
         title: (
-          <Link to="/dashboard/qr-generator" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/lms/qr-generator" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <QrCodeIcon style={{ marginRight: 20 }} />
             QR Code
           </Link>
@@ -106,7 +106,7 @@ const NAVIGATION = [
         // icon: <DescriptionIcon />,
         segment: 'traffic',
         title: (
-          <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/lms/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 20 }} />
             Other
           </Link>
@@ -116,7 +116,7 @@ const NAVIGATION = [
   },
   {
     segment: 'logout',
-    title: <Link to="/dashboard/logout" style={{
+    title: <Link to="/lms/logout" style={{
       textDecoration: 'none', // Removes the underline
       color: '#FFFFFF', 
       fontWeight: 'bold', // Makes the text bold
@@ -126,7 +126,7 @@ const NAVIGATION = [
       // transition: 'background-color 0.3s ease', 
     }}
     >Logout</Link>,
-    icon: <Link to="/dashboard/logout"><LogoutIcon /></Link>,
+    icon: <Link to="/lms/logout"><LogoutIcon /></Link>,
   },
 ];
 
@@ -251,7 +251,7 @@ export default function DashboardLayoutBasic(props)
             </button>
           </div> */}
           <Routes>
-            <Route path="/dashboard" element={<Navigate to="/profile" />} />
+            <Route path="/" element={<Navigate to="/lms/profile" />} />
             <Route path="/student-request" element={<StudentRequests />} />
             <Route path="/qr-generator" element={<QrGenerator />} />
             <Route path="/enable-disable" element={<EnableDisable />} />

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import getUserIdFromToken from '../../functions/GetUserId';
 
 const ThirdCourse = () => {
   const [studeData, setStuData] = useState([]);
@@ -9,7 +10,7 @@ const ThirdCourse = () => {
   const navigate = useNavigate();
   const sub = 'p';
 
-
+ 
   // Dummy Data for Course Materials
   const dummyMaterials = {
     2024: {
@@ -34,20 +35,26 @@ const ThirdCourse = () => {
     },
   };
 
-  useEffect(() => {
-    const fetchBuddhaDetails = async () => {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        const { user_id, role } = JSON.parse(token);
-        if (role === 'student') {
-          try {
+  useEffect(() => 
+  {
+    const fetchBuddhaDetails = async () => 
+    {
+      const user_id = getUserIdFromToken();
+
+      if(user_id) 
+      {
+          try 
+          {
             const result = await axios.get(`http://localhost:3000/api/students/getPaliaDetails/${user_id}`);
             setStuData(result.data.data);
           } 
           catch (error) {
             console.error('Error fetching Buddha details:', error);
           }
-        }
+      }
+      else
+      {
+        navigate("/signin");
       }
     };
     fetchBuddhaDetails();

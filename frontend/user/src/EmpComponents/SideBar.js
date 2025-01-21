@@ -38,7 +38,7 @@ const NAVIGATION = [
   },
   {
     segment: 'dashboard',
-    title: (<Link to="/empDashboard/Dashboard" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>Dashboard </Link>),
+    title: (<Link to="/teacherLms/Dashboard" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>Dashboard </Link>),
     icon: <DashboardIcon />,
     path: './Dashboard',
   },
@@ -57,11 +57,11 @@ const NAVIGATION = [
     children: [
       {
         segment: 'List',
-        title: (<Link to="/empDashboard/Attendance" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><ListIcon style={{ marginRight: 18 }} />Attendance </Link>),
+        title: (<Link to="/teacherLms/Attendance" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><ListIcon style={{ marginRight: 18 }} />Attendance </Link>),
       },
       {
         segment: 'QR scanner',
-        title: (<Link to="/empDashboard/AttendanceMarking" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><QrCodeScannerIcon style={{ marginRight: 18 }} />QR scanner </Link>),
+        title: (<Link to="/teacherLms/AttendanceMarking" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><QrCodeScannerIcon style={{ marginRight: 18 }} />QR scanner </Link>),
       },
       /*{
         segment: 'lms_library',
@@ -85,7 +85,7 @@ const NAVIGATION = [
     children: [
       {
         segment: 'Attendance Summary Report',
-        title: (<Link to="/empDashboard/Summary" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><SummarizeIcon style={{ marginRight: 18 }} />Summary </Link>),
+        title: (<Link to="/teacherLms/Summary" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><SummarizeIcon style={{ marginRight: 18 }} />Summary </Link>),
       },
       // {
       //   segment: 'AttendanceChart',
@@ -93,11 +93,11 @@ const NAVIGATION = [
       // },
       {
         segment: 'AverageAttendanceReport',
-        title: (<Link to="/empDashboard/AverageAttendanceReport" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><BarChartIcon style={{ marginRight: 18 }} />AverageAttendanceReport </Link>),
+        title: (<Link to="/teacherLms/AverageAttendanceReport" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><BarChartIcon style={{ marginRight: 18 }} />AverageAttendanceReport </Link>),
       },
       {
         segment: 'DailyAttendanceReport',
-        title: (<Link to="/empDashboard/DailyAttendanceReport" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><TodayIcon style={{ marginRight: 18 }} />DailyAttendanceReport </Link>),
+        title: (<Link to="/teacherLms/DailyAttendanceReport" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><TodayIcon style={{ marginRight: 18 }} />DailyAttendanceReport </Link>),
       },
     ],
   },
@@ -184,7 +184,7 @@ export default function DashboardLayoutBasic(props)
       <DashboardLayout>
         <PageContainer>
             <Routes>
-                <Route path="/" element={<Navigate to="/empDashboard/Dashboard" />} />
+                {/* <Route path="/" element={<Navigate to="/teacherLms/Dashboard" />} /> */}
                 <Route path="/Attendance" element={<MarkAttendance />} />
                 <Route path="/AttendanceMarking" element={<AttendanceMark/>} />
                 <Route path="/DailyAttendanceReport" element={<DailyAttendance/>} />

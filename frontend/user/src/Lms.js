@@ -60,7 +60,7 @@ const NAVIGATION = [
       {
         segment: '',
         title: (
-          <Link to="/lms/course1" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/lmsPart1/course1" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 18 }} />
             බුද්ධ චරිතය
           </Link>
@@ -69,7 +69,7 @@ const NAVIGATION = [
       {
         segment: '',
         title: (
-          <Link to="/lms/course2" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/lmsPart1/course2" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 18 }} />
             අභිධර්මය
           </Link>
@@ -78,7 +78,7 @@ const NAVIGATION = [
       {
         segment: '',
         title: (
-          <Link to="/lms/course3" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/lmsPart1/course3" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 18 }} />
             පාලි
           </Link>
@@ -124,7 +124,7 @@ const NAVIGATION = [
   {
     segment: 'dashboard',
     title: (
-      <Link to="/lms/announcements" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      <Link to="/lmsPart1/announcements" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
         Announcement
       </Link>
     ),
@@ -208,7 +208,7 @@ export default function DashboardLayoutBasic(props)
       <DashboardLayout>
         <PageContainer>
           <Routes>
-            {/* <Route path="/lms/course1" element={<Navigate to="/FirstCourse" />} /> */}
+            <Route path="/" element={<Navigate to="/lmsPart1/course1" />} />
             <Route path="/course1" element={<FirstCourse />} />
             <Route path="/course2" element={<SecondCourse />} />
             <Route path="/course3" element={<ThirdCourse />} />
