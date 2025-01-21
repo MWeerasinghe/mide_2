@@ -25,7 +25,8 @@ const Login = ({ setUserType }) => {
       localStorage.setItem("vajira_token", token);
       const token1 = localStorage.getItem("vajira_token");
       const id = getUserIdFromToken();
-      if (!id) 
+      
+      if(!id) 
       {
         window.alert("Please login first");
         return;
