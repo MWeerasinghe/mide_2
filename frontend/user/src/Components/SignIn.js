@@ -20,7 +20,8 @@ import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function SignIn() 
+{
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -39,13 +40,12 @@ export default function SignIn() {
 
       const { token } = response.data;
       localStorage.setItem("vajira_token", token);
-      const id = getUserIdFromToken(); // Use imported function to get the user ID
+      const id = getUserIdFromToken();
       if (!id) 
       {
         window.alert("Please login first");
         return;
       }
-
 
       const permissionResponse = await axios.get(`http://localhost:3000/api/user/user/${id}`,{ headers: { Authorization: `Bearer ${token}` } });
 
