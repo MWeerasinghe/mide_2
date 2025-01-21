@@ -15,7 +15,8 @@ import LibraryStaffRegistration from './Components/RegistrationForms/LibraryStaf
 import DhammaSchoolRegistration from './Components/RegistrationForms/DhammaSchoolRegistration';
 import LandingPage from './LandingPage';
 import AdminLand from './adminComponents/SideBar'
-
+import FirstLms from './Components/SideBar';
+import FirstTeacherLms from './EmpComponents/SideBar';
 
 function App() {
   return (
@@ -26,8 +27,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           
           <Route path="/admin/*" element={<AdminLand />} />
-          <Route path="/lms/*" element={<MyCoursesApp />} />
-          <Route path="/teacherLms/*" element={<TeacherLms />} />
+          <Route path="/lmsPart1/*" element={<MyCoursesApp />} />
+          <Route path="/lms/*" element={<FirstLms />} />
+          {/* <Route path="/teacherLms/*" element={<TeacherLms />} /> */}
+          <Route path="/teacherLms/*" element={<FirstTeacherLms />} />
         </Routes>
       </div>
     </Router>
