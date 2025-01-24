@@ -68,7 +68,7 @@ const Profile = () =>
       <Button
   variant="contained"
   color="primary"
-  href="http://opac.vajirarama.lk/cgi-bin/koha/opac-user.pl?has-search-query="
+  href="http://localhost:4001/lmsPart1"
   target="_blank" // Opens the link in a new tab
   rel="noopener noreferrer" // Improves security for external links
   style={{

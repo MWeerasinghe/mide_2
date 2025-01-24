@@ -1,0 +1,87 @@
+/* Assignments.css */
+
+/* Global Styles */
+.assignments-container {
+  padding: 40px;
+  max-width: 100%;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.assignments-container h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+/* Table Styles */
+.assignments-table {
+  width: 90%;
+  max-width: 1200px;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.assignments-table th,
+.assignments-table td {
+  padding: 16px 12px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.assignments-table th {
+  background-color: #34495e;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.assignments-table td {
+  border-bottom: 1px solid #ddd;
+}
+
+.assignments-table tr:hover {
+  background-color: #f0f8ff;
+}
+
+/* Submit Button */
+.submit-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #2ecc71;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #27ae60;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .assignments-table th,
+  .assignments-table td {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+
+  .submit-button {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+}

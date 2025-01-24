@@ -1,0 +1,113 @@
+.home-page {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 1200px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.banner {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+p {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.indicators {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+}
+
+.indicator-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  margin: 0 10px;
+  text-align: center;
+}
+
+.indicator-card h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.indicator-card p {
+  font-size: 1.2em;
+  color: #777;
+}
+
+.charts-section {
+  background-color: #e9f5ff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.chart-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 45%;
+  padding: 20px;
+  margin: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card h3 {
+  font-size: 1.3em;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.chart-card canvas {
+  max-width: 100%;
+  max-height: 300px;
+  height: auto;
+  width: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .indicators {
+    flex-direction: column;
+  }
+
+  .indicator-card {
+    margin: 10px 0;
+  }
+
+  .charts-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chart-card {
+    width: 90%;
+  }
+}

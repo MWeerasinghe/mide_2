@@ -1,0 +1,73 @@
+/* AssignmentSubmit.css */
+.assignment-submit {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+.assignment-submit h1 {
+  text-align: center;
+  font-size: 26px;
+  color: #34495e;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.assignment-submit p {
+  font-size: 18px;
+  color: #7f8c8d;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.assignment-submit form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.assignment-submit label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #2c3e50;
+  font-weight: bold;
+  width: 100%;
+}
+
+.assignment-submit input[type="file"] {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.submit-btn {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #2980b9;
+}
+
+.assignment-submit .note {
+  font-size: 14px;
+  color: #95a5a6;
+  margin-top: 10px;
+  text-align: center;
+}

@@ -68,7 +68,7 @@ useEffect(() =>
     {
         const token = localStorage.getItem('vajira_token');
         const email = profile.email;
-        console.log(email, currentPassword, confirmPassword);
+        // console.log(email, currentPassword, confirmPassword);
         const response = await axios.put('http://localhost:3000/api/user/user', {email, currentPassword, confirmPassword }, {headers: {'Authorization': `Bearer ${token}`}});
         if(response.status === 200)
         {

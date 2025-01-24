@@ -7,6 +7,10 @@ import SecondCourse from './lmsPart1Components/student/course2';
 import ThirdCourse from './lmsPart1Components/student/course3';
 import Announcements from './lmsPart1Components/student/announcements';
 
+import HomePage from './lmsPart2Components/student/HomePage';
+import Assignment from './lmsPart2Components/student/Assignments';
+import AssignmentSubmit from './lmsPart2Components/student/AssignmentSubmit'
+
 
 
 import { extendTheme, styled } from '@mui/material/styles';
@@ -42,7 +46,7 @@ const NAVIGATION = [
   {
     segment: 'dashboard',
     title: (
-      <Link to="/zdf" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      <Link to="/lmsPart1/homePage" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
         Home
       </Link>
     ),
@@ -95,7 +99,7 @@ const NAVIGATION = [
       {
         segment: 'traffic',
         title: (
-          <Link to="/dashboard/qr-generator" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/lmsPart1/assignments" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 20 }} />
             බුද්ධ චරිතය
           </Link>
@@ -208,11 +212,14 @@ export default function DashboardLayoutBasic(props)
       <DashboardLayout>
         <PageContainer>
           <Routes>
-            <Route path="/" element={<Navigate to="/lmsPart1/course1" />} />
+            <Route path="/" element={<Navigate to="/lmsPart1/homePage" />} />
             <Route path="/course1" element={<FirstCourse />} />
             <Route path="/course2" element={<SecondCourse />} />
             <Route path="/course3" element={<ThirdCourse />} />
             <Route path="/announcements" element={<Announcements />} />
+            <Route path="/homePage" element={<HomePage />} />
+            <Route path="/assignments" element={<Assignment />} />
+            <Route path="/assignmentSubmit" element={<AssignmentSubmit />} />
             {/* <Route path="/announcements" element={<Announcement />} /> */}
           </Routes>
         </PageContainer>
