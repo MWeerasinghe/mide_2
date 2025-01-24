@@ -18,7 +18,7 @@ const ValidateRegister = (email, password) => {
     // Validate password complexity
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{7,}$/;
   if (!passwordRegex.test(password)) {
-      return 'Password must include at least one uppercase letter, one lowercase letter, one number, one special character (!@#$%^&*), and be at least 7 characters long';
+      return 'Password must include at leajjjjhjhjjst one uppercase letter, one lowercase letter, one number, one special character (!@#$%^&*), and be at least 7 characters long';
   }
   
   

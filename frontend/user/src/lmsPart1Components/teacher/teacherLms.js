@@ -8,6 +8,9 @@ import CoursesAdd from './courses';
 import AttendanceMark from './attendanceMark';
 import AddResults from './addResult';
 import Announcement from './addAnnouncement';
+import HomeTeacher from '../../lmsPart2Components/teacher/HomePage';
+import Assignments from '../../lmsPart2Components/teacher/Assignments';
+import AssignmentSubmit from '../../lmsPart2Components/student/AssignmentSubmit';
 
 
 
@@ -45,7 +48,7 @@ const NAVIGATION = [
   {
     segment: 'dashboard',
     title: (
-      <Link to="/zdf" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      <Link to="/teacherLmsPart1/homePage" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
         Home
       </Link>
     ),
@@ -63,7 +66,7 @@ const NAVIGATION = [
       {
         segment: '',
         title: (
-          <Link to="/teacherLms/addCourse" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/teacherLmsPart1/addCourse" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 18 }} />
             Add Materials
           </Link>
@@ -72,7 +75,7 @@ const NAVIGATION = [
       {
         segment: '',
         title: (
-          <Link to="/teacherLms/attendanceMark" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/teacherLmsPart1/attendanceMark" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 18 }} />
             Attendance Mark
           </Link>
@@ -81,7 +84,7 @@ const NAVIGATION = [
       {
         segment: '',
         title: (
-          <Link to="/teacherLms/addResult" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/teacherLmsPart1/addResult" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 18 }} />
             Add Result
           </Link>
@@ -98,7 +101,7 @@ const NAVIGATION = [
       {
         segment: 'traffic',
         title: (
-          <Link to="/dashboard/qr-generator" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Link to="/teacherLmsPart1/assignments" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
             <DescriptionIcon style={{ marginRight: 20 }} />
             බුද්ධ චරිතය
           </Link>
@@ -127,7 +130,7 @@ const NAVIGATION = [
   {
     segment: 'dashboard',
     title: (
-      <Link to="/teacherLms/announcement" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      <Link to="/teacherLmsPart1/announcement" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
         Announcement
       </Link>
     ),
@@ -220,6 +223,9 @@ export default function DashboardLayoutBasic(props)
             <Route path="/attendanceMark" element={<AttendanceMark />} />
             <Route path="/addCourse" element={<CoursesAdd />} />
             <Route path="/announcement" element={<Announcement />} />
+            <Route path="/homePage" element={<HomeTeacher />} />
+            <Route path="/assignments" element={<Assignments />} />
+            <Route path="/assignmentSubmit" element={<AssignmentSubmit />} />
           </Routes>
         </PageContainer>
       </DashboardLayout>
