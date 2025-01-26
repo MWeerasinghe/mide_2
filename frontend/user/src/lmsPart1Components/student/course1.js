@@ -150,7 +150,7 @@ const FirstCourse = () =>
             onMouseOver={(e) => (e.target.style.backgroundColor = '#27ae60')}
             onMouseOut={(e) => (e.target.style.backgroundColor = '#2ecc71')}
             onClick={() =>
-              navigate('/lms/announcements', {
+              navigate('/lmsPart1/announcements', {
                 state: { selectedYear, studeData, sub }, // Pass data as state
               })
             }
@@ -199,70 +199,91 @@ const FirstCourse = () =>
             >
               <h2 style={{ textAlign: 'center', color: '#27ae60' }}>Attendance</h2>
               <ul style={{ listStyle: 'none', padding: 0 }}>
-                <li>Term 1: {selectedYearData.t1_attend}%</li>
-                <li>Term 2: {selectedYearData.t2_attend}%</li>
-                <li>Term 3: {selectedYearData.t3_attend}%</li>
+                <li>Term 1: {selectedYearData.t1_attend} Days</li>
+                <li>Term 2: {selectedYearData.t2_attend} Days</li>
+                <li>Term 3: {selectedYearData.t3_attend} Days</li>
               </ul>
             </div>
           </div>
 
          {/* Course Materials */}
-        <div
-          style={{
-            padding: '20px',
-            backgroundColor: '#f9f9fc',
-            borderRadius: '12px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-            margin: '20px 0',
-          }}
-        >
-          <h2 style={{ textAlign: 'center', color: '#6c5ce7', fontSize: '24px', marginBottom: '20px' }}>
-              Course Materials
+         <div
+  style={{
+    padding: '20px',
+    backgroundColor: '#f9f9fc',
+    borderRadius: '12px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    margin: '20px 0',
+  }}
+>
+  <h2
+    style={{
+      textAlign: 'center',
+      color: '#6c5ce7',
+      fontSize: '24px',
+      marginBottom: '20px',
+    }}
+  >
+    Course Materials
+  </h2>
+
+  {materials.length > 0 ? (
+    ['t1', 't2', 't3'].map((term, index) => {
+      const termDisplayName = `Term ${index + 1}`;
+      const termMaterials = materials.filter((material) => material.term === term);
+
+      return (
+        <div key={term} style={{ marginBottom: '30px' }}>
+          <h2
+            style={{
+              color: '#2d3436',
+              fontSize: '20px',
+              borderBottom: '3px solid #b2bec3',
+              paddingBottom: '8px',
+              marginBottom: '15px',
+            }}
+          >
+            {termDisplayName}
           </h2>
-            {materials.length > 0 ? (
-              ['Term 1', 'Term 2', 'Term 3'].map((term) => (
-                <div key={term} style={{ marginBottom: '30px' }}>
-                  <h2
+
+          {termMaterials.length > 0 ? (
+            termMaterials.map((material) => {
+              const fileType = material.note.split('.').pop().toUpperCase();
+              return (
+                <div key={material.id} style={{ marginBottom: '15px' }}>
+                  <a
+                    href={`http://localhost:3000/api/teachers/openpdf/${encodeURIComponent(
+                      material.note
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
-                      color: '#2d3436',
-                      fontSize: '20px',
-                      borderBottom: '3px solid #b2bec3',
-                      paddingBottom: '8px',
-                      marginBottom: '15px',
+                      color: '#0984e3',
+                      textDecoration: 'none',
+                      fontWeight: '500',
+                      fontSize: '16px',
                     }}
                   >
-                    {term}
-                  </h2>
-                  {materials
-                    .filter((material) => `Term ${material.term}` === term)
-                    .map((material) => {
-                      const fileType = material.note.split('.').pop().toUpperCase();
-                      return (
-                        <div key={material.id} style={{ marginBottom: '15px' }}>
-                          <a
-                            href={`http://localhost:3000/api/teachers/openpdf/${encodeURIComponent(material.note)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              color: '#0984e3',
-                              textDecoration: 'none',
-                              fontWeight: '500',
-                              fontSize: '16px',
-                            }}
-                          >
-                            {material.note} ({fileType})
-                          </a>
-                        </div>
-                      );
-                    })
-                    }
-                  </div>
-                ))
-              ) : (
-              <p style={{ textAlign: 'center', color: '#636e72' }}>No materials available for the selected year.</p>
-            )}
+                    {material.note} ({fileType})
+                  </a>
+                </div>
+              );
+            })
+          ) : (
+            <p style={{ color: '#636e72', fontSize: '14px', margin: '10px 0' }}>
+              No materials available for this term.
+            </p>
+          )}
+        </div>
+      );
+    })
+  ) : (
+    <p style={{ textAlign: 'center', color: '#636e72' }}>
+      No materials available for the selected year.
+    </p>
+  )}
+</div>
 
-          </div>
 
         </div>
       ) : (

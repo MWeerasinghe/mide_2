@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import "./TeacherDashboard.css";
+import getUserIdFromToken from '../../functions/GetUserId';
+import getTeacherToken from '../../functions/GetTeacherId';
+
 
 const TeacherDashboard = () => {
   const [year, setYear] = useState("");
@@ -19,11 +23,27 @@ const TeacherDashboard = () => {
     b: "බුද්ධ චරිතය",
     p: "පාලි",
   };
+  const navigate = useNavigate();
+const user_idx = getTeacherToken();
 
   useEffect(() => {
+
+    if(!user_idx) 
+      {
+        navigate("/signin");
+      }
+    // const token = localStorage.getItem('vajira_token');
+      const id = getUserIdFromToken();
+      if(!id)
+      {
+        // window.alert('Please login first');
+        navigate('/signin');
+      } 
+
+
     const fetchData = async () => {
       try {
-        const user_id = 1;
+        const user_id = id;
         const response = await axios.get(`http://localhost:3000/api/teachers/getTeacher`, { params: { user_id } });
         const { data } = response.data;
 
@@ -36,7 +56,9 @@ const TeacherDashboard = () => {
         setUniqueGrades(grades);
         setUniqueTerms(terms);
         setUniqueSubjects(subjects);
-      } catch (error) {
+      } 
+      catch (error) 
+      {
         console.error("Error fetching teacher data:", error);
       }
     };
@@ -63,7 +85,8 @@ const TeacherDashboard = () => {
     }
 
     try {
-      const user_id = 1;
+      const id = getUserIdFromToken();
+      const user_id = id;
 
       const formData = new FormData();
       formData.append("user_id", user_id);
@@ -73,11 +96,7 @@ const TeacherDashboard = () => {
       formData.append("subject", subject);
       formData.append("file", file);
 
-      const response = await axios.post(
-        "http://localhost:3000/api/teachers/uploadMaterials",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      const response = await axios.post("http://localhost:3000/api/teachers/uploadMaterials", formData,{ headers: { "Content-Type": "multipart/form-data" } });
 
       if (response.data.success) {
         alert(`Material "${file.name}" uploaded successfully!`);
