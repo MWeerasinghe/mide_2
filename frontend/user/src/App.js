@@ -27,8 +27,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           
           <Route path="/admin/*" element={<AdminLand />} />
+          
           <Route path="/lmsPart1/*" element={<MyCoursesApp />} />
           <Route path="/lms/*" element={<FirstLms />} />
+          
           <Route path="/teacherLmsPart1/*" element={<TeacherLms />} />
           <Route path="/teacherLms/*" element={<FirstTeacherLms />} />
         </Routes>

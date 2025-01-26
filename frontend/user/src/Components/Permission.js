@@ -44,7 +44,7 @@ const Permission = () => {
   }, []);
 
   const permissions = [
-    { name: 'Physical Library', accessible: lib },
+    { name: 'Library', accessible: lib },
     { name: 'Dhamma School', accessible: dhamma },
   ];
 
@@ -109,7 +109,7 @@ const Permission = () => {
         <Button
           variant="contained"
           color="primary"
-          href="/request-library-permission"
+          href="http://localhost:4001/register"
           sx={{ mr: 2 }}
         >
           Request Library Access
@@ -117,7 +117,7 @@ const Permission = () => {
         <Button
           variant="contained"
           color="secondary"
-          href="/request-dhamma-permission"
+          href="http://localhost:4001/register"
         >
           Request Dhamma School Access
         </Button>

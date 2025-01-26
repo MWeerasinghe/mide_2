@@ -30,6 +30,7 @@ function Logout() {
   const handleConfirmLogout = () => {
     // Clear authentication data (token)
     localStorage.removeItem('vajira_token');
+    localStorage.removeItem('vajira_token_teacher');
     
     // Redirect to the login page
     navigate('/');

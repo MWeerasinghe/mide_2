@@ -86,7 +86,7 @@ useEffect(() =>
     }
     catch(error)
     {
-        setError("Internal server error");
+        setError("Current password is Incorrect");
     }       
 };
 

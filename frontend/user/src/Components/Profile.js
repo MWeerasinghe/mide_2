@@ -68,7 +68,7 @@ const Profile = () =>
       <Button
   variant="contained"
   color="primary"
-  href="http://localhost:4001/lmsPart1"
+  href="#"
   target="_blank" // Opens the link in a new tab
   rel="noopener noreferrer" // Improves security for external links
   style={{
@@ -84,9 +84,9 @@ const Profile = () =>
       <Button
   variant="contained"
   color="secondary"
-  href="https://ab56-192-248-22-102.ngrok-free.app/"
+  href="http://localhost:4001/lmsPart1"
   target="_blank" // Opens the link in a new tab
-  rel="noopener noreferrer" // Improves security for external links
+  // rel="noopener noreferrer"
   style={{
     backgroundColor: '#0074e9',
     padding: '22px 14px',

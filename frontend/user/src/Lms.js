@@ -10,6 +10,7 @@ import Announcements from './lmsPart1Components/student/announcements';
 import HomePage from './lmsPart2Components/student/HomePage';
 import Assignment from './lmsPart2Components/student/Assignments';
 import AssignmentSubmit from './lmsPart2Components/student/AssignmentSubmit'
+import Logout from './Components/Logout';
 
 
 
@@ -150,11 +151,11 @@ const NAVIGATION = [
   },
   {
     segment: 'logout',
-    title: <Link to="/dashboard/logout" style={{
+    title: <Link to="/lmsPart1/logout" style={{
       textDecoration: 'none',
       color: 'inherit', fontSize: '16px',  padding: '4px 8px', borderRadius: '4px'}}
     >Logout</Link>,
-    icon: <Link to="/dashboard/logout"><LogoutIcon /></Link>,
+    icon: <Link to="/lmsPart1/logout"><LogoutIcon /></Link>,
   },
 ];
 
@@ -220,7 +221,7 @@ export default function DashboardLayoutBasic(props)
             <Route path="/homePage" element={<HomePage />} />
             <Route path="/assignments" element={<Assignment />} />
             <Route path="/assignmentSubmit" element={<AssignmentSubmit />} />
-            {/* <Route path="/announcements" element={<Announcement />} /> */}
+            <Route path="/logout" element={<Logout />} />
           </Routes>
         </PageContainer>
       </DashboardLayout>
