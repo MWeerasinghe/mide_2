@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SchoolIcon from '@mui/icons-material/School';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
@@ -15,9 +15,9 @@ const Dashboard = () => {
   const [terms, setTerms] = useState(0);
 
   useEffect(() => {
+  
     const fetchData = async () => {
       try {
-        // Fetch student and teacher data
         const schoolResponse = await axios.get('http://localhost:3000/api/school/user/all');
         const students = schoolResponse.data.data.students.length;
         const teachers = schoolResponse.data.data.teachers.length;
@@ -25,21 +25,17 @@ const Dashboard = () => {
         setStudentCount(students);
         setTeachersCount(teachers);
 
-        // Fetch attendance data
         const attendanceResponse = await axios.get('http://localhost:3000/api/attendance/user/all');
         const attendanceData = attendanceResponse.data.attendance;
 
-        // Get today's date in MM/DD/YYYY format
         const today = new Date();
         const todayFormatted = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
 
-        // Filter attendance for today
         const todayAttendance = attendanceData.filter(record => record.date === todayFormatted);
         setAttendanceCount(todayAttendance.length);
 
-        // Example static values for other data
-        setClasses(12); // Replace with API call if dynamic
-        setTerms(3); // Replace with API call if dynamic
+        setClasses(12);
+        setTerms(3);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       }
@@ -48,9 +44,12 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const navigateToTeacherLMS = () => {
+    window.location.href = 'http://localhost:4001/teacherLmsPart1';
+  };
+
   return (
     <Grid container spacing={3}>
-      {/* Box 1: Student Count */}
       <Grid item xs={12} sm={6} md={4}>
         <Card>
           <CardContent>
@@ -65,22 +64,6 @@ const Dashboard = () => {
         </Card>
       </Grid>
 
-      {/* Box 2: Classes */}
-      {/* <Grid item xs={12} sm={6} md={4}>
-        <Card>
-          <CardContent>
-            <Typography variant="h5" component="div">
-              <SchoolIcon sx={{ marginRight: 1 }} />
-              Classes
-            </Typography>
-            <Typography variant="h4" color="primary">
-              {classes}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid> */}
-
-      {/* Box 3: Attendance Count */}
       <Grid item xs={12} sm={6} md={4}>
         <Card>
           <CardContent>
@@ -95,7 +78,6 @@ const Dashboard = () => {
         </Card>
       </Grid>
 
-      {/* Box 4: Teachers Count */}
       <Grid item xs={12} sm={6} md={4}>
         <Card>
           <CardContent>
@@ -110,7 +92,6 @@ const Dashboard = () => {
         </Card>
       </Grid>
 
-      {/* Box 5: Terms */}
       <Grid item xs={12} sm={6} md={4}>
         <Card>
           <CardContent>
@@ -121,6 +102,25 @@ const Dashboard = () => {
             <Typography variant="h4" color="primary">
               {terms}
             </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card>
+          <CardContent>
+            <Typography variant="h5" component="div" gutterBottom>
+              Teacher LMS
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={navigateToTeacherLMS}
+              size="large"
+              fullWidth
+            >
+              Go to Teacher LMS
+            </Button>
           </CardContent>
         </Card>
       </Grid>

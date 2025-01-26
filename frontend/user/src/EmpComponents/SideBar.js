@@ -28,7 +28,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import TodayIcon from '@mui/icons-material/Today';
-
+import getTeacherToken from '../functions/GetTeacherId';
 
 
 const NAVIGATION = [
@@ -150,6 +150,16 @@ const Skeleton = styled('div')(({ theme, height }) =>
 
 export default function DashboardLayoutBasic(props) 
 {
+  const navigate = useNavigate();
+  const user_idx = getTeacherToken();
+
+  useEffect(() => {
+    if (!user_idx) {
+      navigate('/signin');
+    }
+  }, [user_idx, navigate]);
+
+  
     useEffect(() => 
     {
         const titleElement = document.querySelector('.MuiTypography-root.MuiTypography-h6.css-1je49cu-MuiTypography-root');
@@ -184,7 +194,7 @@ export default function DashboardLayoutBasic(props)
       <DashboardLayout>
         <PageContainer>
             <Routes>
-                {/* <Route path="/" element={<Navigate to="/teacherLms/Dashboard" />} /> */}
+                <Route path="/" element={<Navigate to="/teacherLms/Dashboard" />} />
                 <Route path="/Attendance" element={<MarkAttendance />} />
                 <Route path="/AttendanceMarking" element={<AttendanceMark/>} />
                 <Route path="/DailyAttendanceReport" element={<DailyAttendance/>} />
