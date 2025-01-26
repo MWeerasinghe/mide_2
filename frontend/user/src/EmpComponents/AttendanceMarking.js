@@ -1,60 +1,71 @@
-import React, { useState } from 'react';
-import { Button, Paper, Typography, Dialog, DialogTitle, DialogContent } from '@mui/material';
-import QrScannerPopup from './QrScannerPopup'; // Import the QR Scanner component
+import React, { useEffect, useState } from "react";
+import { Html5QrcodeScanner } from "html5-qrcode";
+import axios from "axios";
+import { Button, Paper, Typography, Dialog, DialogTitle, DialogContent } from "@mui/material";
 
-export default function AttendanceMarkingPage() {
-  const [qrDialogOpen, setQrDialogOpen] = useState(false); // Control visibility of QR Scanner pop-up
-  const [scannedStudent, setScannedStudent] = useState(null); // Store the scanned student details
-  const [errorMessage, setErrorMessage] = useState(null); // Store error messages
+const Attendance = () => {
+  const [userDetails, setUserDetails] = useState(null);
+  const [scannerInstance, setScannerInstance] = useState(null);
+  const [qrDialogOpen, setQrDialogOpen] = useState(false);
 
-  // Dummy data for students
-  const rows = [
-    { id: 1, name: 'John Doe', email: 'johndoe@example.com', grade: '1', date: '2024-11-10', status: 'Unmarked' },
-    { id: 2, name: 'Jane Smith', email: 'janesmith@example.com', grade: '2', date: '2024-11-10', status: 'Present' },
-  ];
-
-  // Function to find a student by ID (from the QR code)
-  const findStudentById = (id) => rows.find(student => student.id === id);
-
-  // Open QR Scanner dialog
   const openQrScanner = () => {
     setQrDialogOpen(true);
-    setErrorMessage(null); // Clear any previous error message
+    setTimeout(() => initializeScanner(), 100); // Delay scanner initialization
   };
 
-  // Close QR Scanner dialog
-  const closeQrScanner = () => setQrDialogOpen(false);
-
-  // Handle the result of a successful QR scan
-  const handleScanSuccess = (result) => {
-    const studentId = parseInt(result); // Assuming the QR code contains the student ID as a number
-    const student = findStudentById(studentId);
-
-    if (student) {
-      student.status = 'Present'; // Update status
-      setScannedStudent(student); // Store the scanned student details
-      setErrorMessage(null); // Clear error message if scan is valid
-    } else {
-      setErrorMessage('Invalid QR code. Please try again.'); // Display error for invalid QR code
-      setScannedStudent(null); // Clear previous scanned student details
+  const closeQrScanner = () => {
+    if (scannerInstance) {
+      scannerInstance.clear();
+      setScannerInstance(null);
     }
-
-    // Automatically close the QR scanner pop-up after processing
-    setTimeout(() => closeQrScanner(), 1000); // Close dialog after 1 second
+    setQrDialogOpen(false);
   };
 
-  // Refresh the page when the Reset button is clicked
-  const handleReset = () => window.location.reload();
+  const initializeScanner = () => {
+    const scannerId = "qr-reader";
+
+    if (!scannerInstance) {
+      const scanner = new Html5QrcodeScanner(scannerId, { fps: 10, qrbox: 250 }, false);
+
+      const handleScanSuccess = async (decodedText) => {
+        try {
+          console.log(`QR Code content: ${decodedText}`);
+          const sriLankaTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Colombo" });
+
+          const [date, time] = sriLankaTime.split(", ");
+          const payload = {
+            user_id: parseInt(decodedText, 10),
+            date,
+            time: time.slice(0, 5),
+          };
+
+          const response = await axios.post("http://localhost:3000/api/attendance/mark", payload);
+          setUserDetails(response.data.user);
+          alert(`Attendance marked successfully: ${response.data.message}`);
+
+          scanner.clear();
+        } catch (error) {
+          console.error("Error marking attendance:", error);
+          alert("Already marked this student today.");
+        }
+      };
+
+      const handleScanFailure = (error) => {
+        console.warn(`Error scanning QR Code: ${error}`);
+      };
+
+      scanner.render(handleScanSuccess, handleScanFailure);
+      setScannerInstance(scanner);
+    }
+  };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px', position: 'relative', minHeight: '100vh' }}>
-      {/* Display Current Date */}
+    <div style={{ textAlign: "center", padding: "20px", position: "relative", minHeight: "100vh" }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Current Date: {new Date().toLocaleDateString()}
       </Typography>
 
-      {/* QR Button in a Box with Instructions */}
-      <Paper sx={{ padding: 2, display: 'inline-block', marginTop: 2 }}>
+      <Paper sx={{ padding: 2, display: "inline-block", marginTop: 2 }}>
         <Typography variant="body1" gutterBottom>
           To mark attendance, please scan the student's QR code.
         </Typography>
@@ -63,47 +74,27 @@ export default function AttendanceMarkingPage() {
         </Button>
       </Paper>
 
-      {/* QR Scanner pop-up */}
       <Dialog open={qrDialogOpen} onClose={closeQrScanner}>
         <DialogTitle>Scan QR Code</DialogTitle>
         <DialogContent>
-          <QrScannerPopup onScanSuccess={handleScanSuccess} />
+          <div id="qr-reader" style={{ width: "300px" }}></div>
         </DialogContent>
       </Dialog>
 
-      {/* Display scanned student details */}
-      {scannedStudent && (
-        <Paper sx={{ marginTop: 2, padding: 2 }}>
-          <Typography variant="h6">Scanned Student Details:</Typography>
-          <Typography>Name: {scannedStudent.name}</Typography>
-          <Typography>Email: {scannedStudent.email}</Typography>
-          <Typography>Grade: {scannedStudent.grade}</Typography>
-          <Typography>Status: {scannedStudent.status}</Typography>
-          <Typography color="green">Status updated to Present.</Typography>
-        </Paper>
+      {userDetails && (
+        <div style={{ marginTop: "20px", textAlign: "left" }}>
+          <h2>Student Details</h2>
+          <p><strong>ID:</strong> {userDetails.id}</p>
+          <p><strong>Full Name:</strong> {userDetails.full_name}</p>
+          <p><strong>Surname:</strong> {userDetails.surname_english}</p>
+          <p><strong>Grade:</strong> {userDetails.school_grade}</p>
+          <p><strong>Class:</strong> {userDetails.class}</p>
+          <p><strong>School:</strong> {userDetails.school}</p>
+          <p><strong>Dhamma Grade:</strong> {userDetails.dhamma_grade}</p>
+        </div>
       )}
-
-      {/* Display error message for invalid QR codes */}
-      {errorMessage && (
-        <Paper sx={{ marginTop: 2, padding: 2, backgroundColor: '#f8d7da' }}>
-          <Typography color="error">{errorMessage}</Typography>
-        </Paper>
-      )}
-
-      {/* Reset Button */}
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={handleReset}
-        sx={{
-          position: 'fixed',
-          bottom: 20,
-          right: 20,
-          padding: '10px 20px',
-        }}
-      >
-        Reset
-      </Button>
     </div>
   );
-}
+};
+
+export default Attendance;

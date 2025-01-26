@@ -47,8 +47,8 @@ export default function Attendance() {
 
     // Filter by date
     if (selectedDate) {
-      const formattedDate = dayjs(selectedDate).format('D/M/YYYY'); // Format selected date
-      filtered = filtered.filter((row) => row.date === formattedDate);
+      const formattedSelectedDate = dayjs(selectedDate).format('M/D/YYYY'); // Format selected date
+      filtered = filtered.filter((row) => dayjs(row.date).format('M/D/YYYY') === formattedSelectedDate);
     }
 
     // Filter by grade

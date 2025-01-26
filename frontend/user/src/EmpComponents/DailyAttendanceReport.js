@@ -12,20 +12,20 @@ export default function DailyAttendanceReport() {
     const fetchAttendanceReport = async () => {
       try {
         setLoading(true);
-        
-        // Fetch students data
+
+        // Fetch total students
         const studentResponse = await axios.get('http://localhost:3000/api/school/user/all');
         const totalStudents = studentResponse.data.data.students.length;
-        console.log(totalStudents);
+
         // Fetch attendance data
         const attendanceResponse = await axios.get('http://localhost:3000/api/attendance/user/all');
         const attendanceRecords = attendanceResponse.data.attendance;
-        console.log(attendanceResponse);
 
-        // Calculate attendance for today and yesterday
-        const today = dayjs().format('YYYY-MM-DD');
-        const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
+        // Dates for today and yesterday
+        const today = dayjs().format('M/D/YYYY'); // Adjusted format to match API response
+        const yesterday = dayjs().subtract(1, 'day').format('M/D/YYYY');
 
+        // Calculate attendance for a given date
         const calculateAttendance = (date) => {
           const presentStudents = new Set(
             attendanceRecords.filter((record) => record.date === date).map((record) => record.user_id)
@@ -36,6 +36,7 @@ export default function DailyAttendanceReport() {
           return { date, present: presentCount, absent: absentCount };
         };
 
+        // Generate report for today and yesterday
         const reportData = [
           calculateAttendance(today),
           calculateAttendance(yesterday),
@@ -63,9 +64,6 @@ export default function DailyAttendanceReport() {
 
   return (
     <div style={{ padding: 20 }}>
-      {/* <Typography variant="h4" gutterBottom>
-        Daily Attendance Report
-      </Typography> */}
       {attendanceData.map((record, index) => (
         <Paper key={index} style={{ margin: '10px 0', padding: 15 }}>
           <Typography variant="h6">Date: {record.date}</Typography>

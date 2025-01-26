@@ -118,8 +118,8 @@ const NAVIGATION = [
     segment: 'logout',
     title: <Link to="/lms/logout" style={{
       textDecoration: 'none', // Removes the underline
-      color: '#FFFFFF', 
-      fontWeight: 'bold', // Makes the text bold
+      color: 'inherit', 
+      // fontWeight: 'bold',
       fontSize: '16px', // Sets the font size (adjust as needed)
       padding: '4px 8px', // Adds padding for better spacing
       borderRadius: '4px', // Optional: Adds rounded corners

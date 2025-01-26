@@ -57,6 +57,7 @@ export default function SignIn()
       } 
       else if (userData.dhamTeacher) 
       {
+        localStorage.setItem("vajira_token_teacher", token);
         navigate("/teacherLms");
       } 
       else if (userData.admin) 
