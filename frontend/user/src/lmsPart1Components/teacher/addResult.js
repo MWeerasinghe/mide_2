@@ -1,8 +1,23 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import axios from "axios";
 import "./AddResults.css";
+import getTeacherToken from '../../functions/GetTeacherId';
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+
+
+
 
 const AddResultsPage = () => {
+
+  const navigate = useNavigate();
+  const user_idx = getTeacherToken();
+
+  useEffect(() => {
+    if (!user_idx) {
+      navigate('/signin');
+    }
+  }, [user_idx, navigate]);
+
   const [year, setYear] = useState("");
   const [grade, setGrade] = useState("");
   const [subject, setSubject] = useState("");

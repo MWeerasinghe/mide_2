@@ -11,6 +11,7 @@ import Announcement from './addAnnouncement';
 import HomeTeacher from '../../lmsPart2Components/teacher/HomePage';
 import Assignments from '../../lmsPart2Components/teacher/Assignments';
 import AssignmentSubmit from '../../lmsPart2Components/student/AssignmentSubmit';
+import Logout from '../../Components/Logout';
 
 
 
@@ -36,8 +37,7 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 
-
-
+import getTeacherToken from '../../functions/GetTeacherId';
 
 
 const NAVIGATION = [
@@ -134,7 +134,8 @@ const NAVIGATION = [
         Announcement
       </Link>
     ),
-    icon: <CampaignIcon />,
+    // icon: <CampaignIcon />,
+    icon: <Link to="/teacherLmsPart1/announcement"><CampaignIcon /></Link>,
     path: '/profile',
   },
   {
@@ -152,7 +153,7 @@ const NAVIGATION = [
   },
   {
     segment: 'logout',
-    title: <Link to="/dashboard/logout" style={{
+    title: <Link to="/teacherLmsPart1/logout" style={{
       textDecoration: 'none',
       color: 'inherit', 
       fontSize: '16px',
@@ -160,7 +161,7 @@ const NAVIGATION = [
       borderRadius: '4px',
     }}
     >Logout</Link>,
-    icon: <Link to="/dashboard/logout"><LogoutIcon /></Link>,
+    icon: <Link to="/teacherLmsPart1/logout"><LogoutIcon /></Link>,
   },
 ];
 
@@ -187,11 +188,17 @@ const Skeleton = styled('div')(({ theme, height }) => ({
 
 export default function DashboardLayoutBasic(props) 
 {
-  
+const navigate = useNavigate();
+const user_id = getTeacherToken();
 
 
   useEffect(() => 
     {
+      if(!user_id) 
+      {
+        navigate("/signin");
+      }
+        
         const titleElement = document.querySelector('.MuiTypography-root.MuiTypography-h6.css-1je49cu-MuiTypography-root');
         if (titleElement) 
         {
@@ -218,7 +225,7 @@ export default function DashboardLayoutBasic(props)
       <DashboardLayout>
         <PageContainer>
           <Routes>
-            {/* <Route path="/lms/course1" element={<Navigate to="/FirstCourse" />} /> */}
+            <Route path="/" element={<Navigate to="/teacherLmsPart1/homePage" />} />
             <Route path="/addResult" element={<AddResults />} />
             <Route path="/attendanceMark" element={<AttendanceMark />} />
             <Route path="/addCourse" element={<CoursesAdd />} />
@@ -226,6 +233,7 @@ export default function DashboardLayoutBasic(props)
             <Route path="/homePage" element={<HomeTeacher />} />
             <Route path="/assignments" element={<Assignments />} />
             <Route path="/assignmentSubmit" element={<AssignmentSubmit />} />
+            <Route path="/logout" element={<Logout />} />
           </Routes>
         </PageContainer>
       </DashboardLayout>

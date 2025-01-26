@@ -1,8 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import "./Announcement.css"; 
+import getUserIdFromToken from '../../functions/GetUserId';
+import getTeacherToken from '../../functions/GetTeacherId';
 
-const TeacherAnnouncements = () => {
+const TeacherAnnouncements = () => 
+{
+
+  const navigate = useNavigate();
+  const user_idx = getTeacherToken();
+
+  useEffect(() => {
+    if (!user_idx) {
+      navigate('/signin');
+    }
+  }, [user_idx, navigate]);
+  
+  const id = getUserIdFromToken();
+
   const currentYear = new Date().getFullYear();
   const years = [currentYear, currentYear - 1];
   const grades = ["6", "7", "8", "9", "10", "11"];
@@ -18,7 +34,7 @@ const TeacherAnnouncements = () => {
     subject: "",
     announcement: "",
     date: new Date().toISOString().split("T")[0], // Format as YYYY-MM-DD
-    user_id: 1,
+    user_id: id,
   });
   
   const handleInputChange = (e) => {

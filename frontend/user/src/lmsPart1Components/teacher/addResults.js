@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AddResults.css";
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import getTeacherToken from '../../functions/GetTeacherId';
 
 const AddResultsPage = () => {
   const [year, setYear] = useState("");
@@ -12,8 +14,22 @@ const AddResultsPage = () => {
   const subjects = ["අභිධර්මය", "බුද්ධ චරිතය", "පාලි"];
   const gradeOptions = ["A", "B", "C", "D", "F"];
 
+
+  const navigate = useNavigate();
+  const user_idx = getTeacherToken();
+
+  useEffect(() => {
+    if (!user_idx) {
+      navigate('/signin');
+    }
+  }, [user_idx, navigate]);
+
   const fetchStudentData = async () => 
   {
+    if(!user_idx) 
+    {
+      navigate("/signin");
+    }
     if (!year || !grade || !subject) 
     {
       alert("Please select year, grade, and subject.");
