@@ -38,7 +38,8 @@ const insertAttendanceQuery = `
   VALUES (:user_id, :date, :time)
 `;
 
-router.post('/mark', async (req, res) => {
+router.post('/mark', async (req, res) => 
+{
   const { user_id, date, time } = req.body;
 
   if (!user_id || !date || !time) {

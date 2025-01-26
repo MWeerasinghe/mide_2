@@ -33,32 +33,32 @@ router.get('/getAllTeachers', async (req, res) =>
 
 //______________get specific teacher______________________
 router.get('/getTeacher', async (req, res) => 
+{
+    try 
     {
-        try 
-        {
-            const { user_id } = req.query; // Extract user_id from query parameters
-            if (!user_id) {
-                return res.status(400).json({ success: false, message: "user_id is required" });
-            }
-    
-            const query = `SELECT * FROM assign_teachers WHERE user_id = :user_id`;
-            const teachers = await sequelize.query(query, { 
-                replacements: { user_id }, 
-                type: sequelize.QueryTypes.SELECT 
-            });
-    
-            res.status(200).json({ success: true, data: teachers });
-        } 
-        catch (error) 
-        {
-            console.error('Error fetching teachers:', error);
-            res.status(500).json({ 
-                success: false, 
-                message: 'An error occurred while retrieving teachers.', 
-                error: error.message 
-            });
+        const { user_id } = req.query; // Extract user_id from query parameters
+        if (!user_id) {
+            return res.status(400).json({ success: false, message: "user_id is required" });
         }
-    });
+
+        const query = `SELECT * FROM assign_teachers WHERE user_id = :user_id`;
+        const teachers = await sequelize.query(query, { 
+            replacements: { user_id }, 
+            type: sequelize.QueryTypes.SELECT 
+        });
+
+        res.status(200).json({ success: true, data: teachers });
+    } 
+    catch (error) 
+    {
+        console.error('Error fetching teachers:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'An error occurred while retrieving teachers.', 
+            error: error.message 
+        });
+    }
+});
     
 
 
@@ -255,15 +255,20 @@ router.post('/setStudentAttendance', async (req, res) =>
             const t2_attend = req.body.term2;
             const t3_attend = req.body.term3;
 
+        console.log('aaaa');
+
+            console.log(id, subject, t1_attend,t2_attend, t3_attend);
         
-            if(!id || !t1_attend || !t2_attend || !t3_attend || !subject) 
+            if(id==null || t1_attend==null || t2_attend==null || t3_attend==null || subject==null) 
             {
+            console.log('ccccc');
+
                 return res.status(400).json({
                     success: false,
                     message: 'Missing required fields: id, term1, term2 or term3 attendance counts.',
                 });
             }
-        
+        console.log('llll');
             let querys;
             if (subject === "a") {
                 querys = `
@@ -284,12 +289,16 @@ router.post('/setStudentAttendance', async (req, res) =>
                 return res.status(400).json({ success: false, message: 'Incorrect subject.' });
             }
         
+        console.log('mmmmm');
+
             // Execute the query with replacements
             const result = await sequelize.query(querys, {
                 replacements: { id, t1_attend, t2_attend, t3_attend},
                 type: sequelize.QueryTypes.UPDATE,
             });
         
+        console.log('bbbbbbb');
+
             // Check the result
             if (result[1] > 0) 
             {
@@ -308,6 +317,8 @@ router.post('/setStudentAttendance', async (req, res) =>
         } 
         catch (error) 
         {
+        console.log('xxxxxx');
+
             res.status(500).json({
                 success: false,
                 message: 'An error occurred while updating student attendance.',

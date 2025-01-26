@@ -231,8 +231,8 @@ router.post('/acceptOrRejectRequestStudents', async (req, res) =>
                     const user_id = ifExist.id;
                     console.log('cccccc');
     
-                    const qry1 = `INSERT INTO dham_student (user_id) VALUES (:user_id)`;
-                    const result1 = await sequelize.query(qry1, { replacements: {user_id}, type: sequelize.QueryTypes.INSERT });
+                    const qry1 = `INSERT INTO dham_student (user_id, dhamma_grade) VALUES (:user_id, :dhamma_grade)`;
+                    const result1 = await sequelize.query(qry1, { replacements: {user_id, dhamma_grade: grade}, type: sequelize.QueryTypes.INSERT });
                     console.log('dddddddd');
     
                     const t1_result = 'Not yet';
