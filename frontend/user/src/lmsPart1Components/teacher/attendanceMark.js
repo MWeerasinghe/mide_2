@@ -1,6 +1,8 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import "./AttendanceMarking.css";
+import getTeacherToken from '../../functions/GetTeacherId';
 
 const AttendanceMarkingWithLock = () => {
   const [year, setYear] = useState("");
@@ -17,8 +19,22 @@ const AttendanceMarkingWithLock = () => {
     { label: "බුද්ධ චරිතය", value: "b" },
     { label: "පාලි", value: "p" },
   ];
+  const navigate = useNavigate();
+  const user_idx = getTeacherToken();
 
-  const fetchStudentData = async () => {
+  useEffect(() => {
+    if (!user_idx) {
+      navigate('/signin');
+    }
+  }, [user_idx, navigate]);
+  
+  const fetchStudentData = async () => 
+  {
+    if(!user_idx) 
+    {
+      navigate("/signin");
+    }
+    
     if (!year || !grade || !subject) {
       alert("Please select year, grade, and subject.");
       return;
@@ -99,6 +115,7 @@ const AttendanceMarkingWithLock = () => {
     const student = students.find((s) => s.id === id);
 
     try {
+      console.log('hhhhh', student.id, subject, student.term1, student.term2, student.term3);
       await axios.post("http://localhost:3000/api/teachers/setStudentAttendance", {
         id: student.id,
         subject: subject,

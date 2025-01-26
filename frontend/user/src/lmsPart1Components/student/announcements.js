@@ -11,7 +11,7 @@ const Announcements = () => {
 
   const x = sub;
   let subName;
-  if(x === 'a')
+  if(x == 'a')
   {
      subName = 'අභිධර්මය';
   }
