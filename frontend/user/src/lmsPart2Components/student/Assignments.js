@@ -12,11 +12,9 @@ const Assignments = () => {
   ];
 
   const handleSubmitRedirect = (id) => {
-    // Navigate to the Assignment Submit page with the assignment ID
-    // navigate(`/assignments/${id}/submit`);
-    navigate(`/lmsPart1/assignmentSubmit`);
+    navigate("/lmsPart1/assignmentSubmit", { state: { id } });
   };
-
+  
   return (
     <div className="assignments-container">
       <h1>Assignments</h1>
