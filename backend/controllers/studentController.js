@@ -199,4 +199,107 @@ router.post('/save', async (req, res) => {
     }
 });
 
+
+//__________________________________________________________________________________
+//__________________get profile details_____________________
+//http://localhost:3000/api/students/getProfileDetails/
+router.get('/getProfileDetails/:user_id', async (req, res) => 
+    {
+        try 
+        {
+            const user_id = req.params.user_id;
+            const query = `SELECT * FROM "Users" WHERE "id" = :user_id`;
+            const buddha = await sequelize.query(query, { replacements: { user_id }, type: sequelize.QueryTypes.SELECT});
+    
+            if(buddha)
+            {
+                res.status(200).json({ success: true, data: buddha });
+            }
+            else
+            {
+                res.status(400).json({ success: false});
+            }
+        } 
+        catch (error) 
+        {
+            console.error('Error fetching student:', error);
+            res.status(500).json({ success: false, message: 'An error occurred while retrieving student.', error: error.message });
+        }
+    });
+
+
+
+    //________________________________________
+    const multer = require("multer");
+
+    const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, "./assignments"); // Save files in the "resources" directory
+        },
+        filename: function (req, file, cb) {
+            cb(null, `${Date.now()}_${file.originalname}`); // Use a timestamped filename
+        },
+    });
+
+const upload = multer({ storage });
+
+// Assignment Upload Route
+router.post("/assignmentUpload", upload.single("file"), async (req, res) => {
+    try 
+    {
+        const { user_id, assign_id } = req.body;
+
+        // Validate Required Fields
+        if (!user_id || !assign_id || !req.file) {
+            return res.status(200).json({
+                success: false,
+                message: "All fields and a file are required.",
+            });
+        }
+
+        // Extract File Location
+        const location = req.file.filename;
+
+        // Define Table Name
+        const table = "assignment_uploads";
+
+        // SQL Query to Insert Record
+        const query = `
+            INSERT INTO ${table} 
+            (assign_id, student_id, location) 
+            VALUES 
+            (:assign_id, :student_id, :location)
+        `;
+
+        // Execute Query with Replacements
+        const result = await sequelize.query(query, {
+            replacements: { assign_id, student_id:user_id, location },
+            type: sequelize.QueryTypes.INSERT,
+        });
+
+        // Success Response
+        res.status(200).json({
+            success: true,
+            message: "Material uploaded successfully.",
+            data: result,
+        });
+
+    } 
+    catch (error) 
+    {
+
+        console.error("Error uploading materials:", error);
+
+
+        // Error Response
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while uploading materials.",
+            error: error.message,
+        });
+    }
+});
+
+
+
 module.exports = router;
