@@ -1,0 +1,30 @@
+.view-edit-button {
+    background-color: #4CAF50; /* Green */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px 20px; /* Padding for button */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    cursor: pointer; /* Pointer cursor on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+  }
+  
+  .view-edit-button:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
+    transform: scale(1.05); /* Slight zoom on hover */
+  }
+  
+  .view-edit-button:active {
+    background-color: #3e8e41; /* Even darker green on active */
+    transform: scale(0.95); /* Slight shrink on click */
+  }
+  
+  .view-edit-button:disabled {
+    background-color: #ccc; /* Gray color when disabled */
+    color: #666; /* Dimmed text color */
+    cursor: not-allowed; /* Not-allowed cursor */
+    box-shadow: none; /* Remove shadow */
+  }
+  
