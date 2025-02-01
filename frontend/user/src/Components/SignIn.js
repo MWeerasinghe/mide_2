@@ -53,6 +53,7 @@ export default function SignIn()
 
       if (userData.dhamStudent) 
       {
+        localStorage.setItem("vajira_token_student", token);
         navigate("/lms");
       } 
       else if (userData.dhamTeacher) 
@@ -62,6 +63,7 @@ export default function SignIn()
       } 
       else if (userData.admin) 
       {
+        localStorage.setItem("vajira_token_admin", token);
         navigate("/admin");
       } 
       else 
