@@ -35,6 +35,8 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 
+//------mitun----------------------
+import Setting from './lmsPart2Components/student/Settings';
 
 
 
@@ -92,40 +94,51 @@ const NAVIGATION = [
     
     ],
   },
+  // {
+  //   segment: 'reports',
+  //   title: 'Assignments',
+  //   icon: <EditIcon  />,
+  //   children: [
+  //     {
+  //       segment: 'traffic',
+  //       title: (
+  //         <Link to="/lmsPart1/assignments" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+  //           <DescriptionIcon style={{ marginRight: 20 }} />
+  //           බුද්ධ චරිතය
+  //         </Link>
+  //       ),
+  //     },
+  //     {
+  //       segment: 'traffic',
+  //       title: (
+  //         <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+  //           <DescriptionIcon style={{ marginRight: 20 }} />
+  //           අභිධර්මය
+  //         </Link>
+  //       ),
+  //     },
+  //     {
+  //       segment: 'traffic',
+  //       title: (
+  //         <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+  //           <DescriptionIcon style={{ marginRight: 20 }} />
+  //           පාලි
+  //         </Link>
+  //       ),
+  //     },
+  //   ],
+  // },
   {
-    segment: 'reports',
-    title: 'Assignments',
-    icon: <EditIcon  />,
-    children: [
-      {
-        segment: 'traffic',
-        title: (
-          <Link to="/lmsPart1/assignments" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-            <DescriptionIcon style={{ marginRight: 20 }} />
-            බුද්ධ චරිතය
-          </Link>
-        ),
-      },
-      {
-        segment: 'traffic',
-        title: (
-          <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-            <DescriptionIcon style={{ marginRight: 20 }} />
-            අභිධර්මය
-          </Link>
-        ),
-      },
-      {
-        segment: 'traffic',
-        title: (
-          <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-            <DescriptionIcon style={{ marginRight: 20 }} />
-            පාලි
-          </Link>
-        ),
-      },
-    ],
+    segment: 'dashboard',
+    title: (
+      <Link to="/lmsPart1/assignments" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+        Assignment
+      </Link>
+    ),
+    icon: <EditIcon   />,
+    path: '/profile',
   },
+  
   {
     segment: 'dashboard',
     title: (
@@ -142,7 +155,7 @@ const NAVIGATION = [
   {
     segment: 'dashboard',
     title: (
-      <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      <Link to="/lmsPart1/setting" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
         Settings
       </Link>
     ),
@@ -221,6 +234,7 @@ export default function DashboardLayoutBasic(props)
             <Route path="/homePage" element={<HomePage />} />
             <Route path="/assignments" element={<Assignment />} />
             <Route path="/assignmentSubmit" element={<AssignmentSubmit />} />
+            <Route path="/setting" element={<Setting />} />
             <Route path="/logout" element={<Logout />} />
           </Routes>
         </PageContainer>
