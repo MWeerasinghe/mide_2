@@ -211,7 +211,7 @@ const SecondCourse = () => {
                 borderRadius: '8px',
               }}
             >
-              <h2 style={{ textAlign: 'center', color: '#27ae60' }}>Attendance</h2>
+              <h2 style={{ textAlign: 'center', color: '#27ae60' }}>Attendance for Subject</h2>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 <li>Term 1: {selectedYearData.t1_attend} Days</li>
                 <li>Term 2: {selectedYearData.t2_attend} Days</li>
