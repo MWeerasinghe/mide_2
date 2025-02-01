@@ -1,8 +1,0 @@
-.fixedNavbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: #fff; /* Optional: Add a background color so it’s visible */
-  }
-  
