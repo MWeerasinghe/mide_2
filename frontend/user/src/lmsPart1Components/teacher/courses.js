@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./TeacherDashboard.css";
+import "./addMaterial.css";
 import getUserIdFromToken from '../../functions/GetUserId';
 import getTeacherToken from '../../functions/GetTeacherId';
-
 
 const TeacherDashboard = () => {
   const [year, setYear] = useState("");
@@ -24,22 +24,16 @@ const TeacherDashboard = () => {
     p: "පාලි",
   };
   const navigate = useNavigate();
-const user_idx = getTeacherToken();
+  const user_idx = getTeacherToken();
 
   useEffect(() => {
-
-    if(!user_idx) 
-      {
-        navigate("/signin");
-      }
-    // const token = localStorage.getItem('vajira_token');
-      const id = getUserIdFromToken();
-      if(!id)
-      {
-        // window.alert('Please login first');
-        navigate('/signin');
-      } 
-
+    if (!user_idx) {
+      navigate("/signin");
+    }
+    const id = getUserIdFromToken();
+    if (!id) {
+      navigate('/signin');
+    }
 
     const fetchData = async () => {
       try {
@@ -56,9 +50,7 @@ const user_idx = getTeacherToken();
         setUniqueGrades(grades);
         setUniqueTerms(terms);
         setUniqueSubjects(subjects);
-      } 
-      catch (error) 
-      {
+      } catch (error) {
         console.error("Error fetching teacher data:", error);
       }
     };
@@ -96,7 +88,7 @@ const user_idx = getTeacherToken();
       formData.append("subject", subject);
       formData.append("file", file);
 
-      const response = await axios.post("http://localhost:3000/api/teachers/uploadMaterials", formData,{ headers: { "Content-Type": "multipart/form-data" } });
+      const response = await axios.post("http://localhost:3000/api/teachers/uploadMaterials", formData, { headers: { "Content-Type": "multipart/form-data" } });
 
       if (response.data.success) {
         alert(`Material "${file.name}" uploaded successfully!`);
@@ -114,10 +106,22 @@ const user_idx = getTeacherToken();
     }
   };
 
+  const navigateToDeleteMaterial = () => {
+    navigate("/teacherLmsPart1/deleteMaterial");
+  };
+
   return (
     <div className="dashboard-container">
       <div className="content">
         <h2>Upload Lecture Materials</h2>
+
+        <button
+          className="view-edit-button"
+          onClick={navigateToDeleteMaterial}
+        >
+          View & Edit
+        </button>
+
         <form className="upload-form" onSubmit={(e) => e.preventDefault()}>
           <div className="form-group">
             <label>Year</label>
