@@ -1,0 +1,95 @@
+/* Styling for the Announcement Manager component */
+.announcement-manager {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .filters select {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  
+  .announcement-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .announcement-table th, .announcement-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .announcement-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .announcement-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .announcement-table button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .announcement-table button:hover {
+    background-color: #45a049;
+  }
+  
+  .update-form {
+    margin-top: 30px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .update-form form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .update-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .update-form input, .update-form textarea {
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .update-form button {
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .update-form button:hover {
+    background-color: #0056b3;
+  }
+  

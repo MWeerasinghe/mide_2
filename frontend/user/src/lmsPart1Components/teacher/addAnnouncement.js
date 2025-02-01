@@ -85,6 +85,11 @@ const TeacherAnnouncements = () =>
     }
   };
 
+
+  const navigateToDeleteMaterial = () => {
+    navigate("/teacherLmsPart1/deleteAnnouncement");
+  };
+
   return (
     <div className="announcement-container">
       <h2>Create Announcement</h2>
@@ -167,6 +172,12 @@ const TeacherAnnouncements = () =>
 
         <button type="submit" className="submit-button">
           Add Announcement
+        </button>
+        <button
+          className="view-edit-button"
+          onClick={navigateToDeleteMaterial}
+        >
+          View & Edit
         </button>
       </form>
     </div>
