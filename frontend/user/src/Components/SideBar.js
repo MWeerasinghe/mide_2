@@ -100,18 +100,16 @@ const NAVIGATION = [
           </Link>
         ),
       },
-      {
-        // segment: 'profile',
-        // title: 'Other',
-        // icon: <DescriptionIcon />,
-        segment: 'traffic',
-        title: (
-          <Link to="/lms/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-            <DescriptionIcon style={{ marginRight: 20 }} />
-            Other
-          </Link>
-        ),
-      },
+      // {
+      
+      //   segment: 'traffic',
+      //   title: (
+      //     <Link to="/lms/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      //       <DescriptionIcon style={{ marginRight: 20 }} />
+      //       Other
+      //     </Link>
+      //   ),
+      // },
     ],
   },
   {

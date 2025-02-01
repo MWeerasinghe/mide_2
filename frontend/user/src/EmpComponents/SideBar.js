@@ -11,6 +11,7 @@ import AttendanceChart from './AttendanceChart';
 import Summary from './Summary';
 import UserDashboard from './Dashboard';
 import downloadImage from '../assets/download.png';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import { extendTheme, styled } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -29,6 +30,7 @@ import ShowChartIcon from '@mui/icons-material/ShowChart';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import TodayIcon from '@mui/icons-material/Today';
 import getTeacherToken from '../functions/GetTeacherId';
+import Logout from '../Components/Logout';
 
 
 const NAVIGATION = [
@@ -99,13 +101,14 @@ const NAVIGATION = [
         segment: 'DailyAttendanceReport',
         title: (<Link to="/teacherLms/DailyAttendanceReport" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><TodayIcon style={{ marginRight: 18 }} />DailyAttendanceReport </Link>),
       },
+      
     ],
   },
-  /*{
+  {
     segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
-  },*/
+    title: (<Link to="/teacherLms/logout" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>Logout </Link>),
+    icon: <LogoutIcon />,
+  },
 ];
 
 const demoTheme = extendTheme({
@@ -202,6 +205,7 @@ export default function DashboardLayoutBasic(props)
                 <Route path="/AttendanceChart" element={<AttendanceChart/>} />
                 <Route path="/Summary" element={<Summary/>} />
                 <Route path="/Dashboard" element={<UserDashboard />} />
+                <Route path="/logout" element={<Logout />} />
             </Routes>
         </PageContainer>
       </DashboardLayout>

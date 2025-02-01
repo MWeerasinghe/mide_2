@@ -1,11 +1,14 @@
 import React , { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom';
 
 //Register Requests
 import StudentRegisterRequests from './RegisterRequests/StudentRegisterRequests';
 import BhikkuRegisterRequests from './RegisterRequests/BhikkuRegisterRequests';
 import OpenMemberRegisterRequests from './RegisterRequests/OpenMemberRegisterRequests';
+import Dashboard from './Dashboard';
+import Logout from './Logout';
+import Attendance from './AttendanceMarking';
 
 import downloadImage from '../assets/download.png';
 
@@ -18,6 +21,9 @@ import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SummaryReport from './DailyAttendanceReport';
+
 
 
 
@@ -28,14 +34,14 @@ const NAVIGATION = [
   },
   {
     segment: 'dashboard',
-    title: 'Dashboard',
+    title: (<Link to="/admin/dashboard" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>Student Details </Link>),
     icon: <DashboardIcon />,
     path: '/',
   },
   {
     segment: 'orders',
-    title: 'Library Registration Requests',
-    icon: <ShoppingCartIcon />,
+    title: 'Registration Requests',
+    icon: <DashboardIcon />,
     children: [
       {
         segment: 'sales',
@@ -67,20 +73,21 @@ const NAVIGATION = [
     children: [
       {
         segment: 'sales',
-        title: 'Sales',
-        icon: <DescriptionIcon />,
+        title: (<Link to="/admin/attendance" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><DescriptionIcon style={{ marginRight: 18 }} />Mark Attendance</Link>),
       },
       {
-        segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
+        segment: 'summary',
+        title: (<Link to="/admin/summary" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}><DescriptionIcon style={{ marginRight: 18 }} />Summary</Link>),
       },
     ],
   },
   {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
+    segment: 'logout',
+    title: <Link to="/admin/logout" style={{
+      textDecoration: 'none',
+      color: 'inherit', fontSize: '16px',  padding: '4px 8px', borderRadius: '4px'}}
+    >Logout</Link>,
+    icon: <Link to="/admin/logout"><LogoutIcon /></Link>,
   },
 ];
 
@@ -149,7 +156,22 @@ export default function DashboardLayoutBasic(props)
         }
       }, []);
 
+  const navigate = useNavigate();
+  // Authentication check function
+  const checkAuth = async () => 
+  {
+    const token = localStorage.getItem('vajira_token');
+    const token1 = localStorage.getItem('vajira_token_admin');
+    if (!token || !token1) 
+    {
+      navigate("/signin");
+    }
+  };
   
+    useEffect(() => {
+      checkAuth();
+    }, [])
+
   const { window } = props;
   const router = useDemoRouter('/');
   const demoWindow = window ? window() : undefined;
@@ -160,9 +182,14 @@ export default function DashboardLayoutBasic(props)
       <DashboardLayout>
         <PageContainer>
             <Routes>
+                <Route path="/" element={<Navigate to="/admin/dashboard" />} />
                 <Route path="/student-register-requests" element={<StudentRegisterRequests />} />
                 <Route path="/bhikku-register-requests" element={<BhikkuRegisterRequests />} />
                 <Route path="/open-member-register-requests" element={<OpenMemberRegisterRequests />} />
+                <Route path="/dashboard" element={<Dashboard/>} />
+                <Route path="/attendance" element={<Attendance/>} />
+                <Route path="/logout" element={<Logout/>} />
+                <Route path="/summary" element={<SummaryReport/>} />
             </Routes>
         </PageContainer>
       </DashboardLayout>
