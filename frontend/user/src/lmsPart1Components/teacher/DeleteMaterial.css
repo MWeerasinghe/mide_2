@@ -1,0 +1,99 @@
+/* General styles for the container */
+.delete-material-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #007bff;
+  }
+  
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .filter-select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 30%;
+  }
+  
+  .fetch-button {
+    /* display: block; */
+    margin: 20px auto;
+    /* padding: 22px 24px; */
+    font-size: 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .fetch-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .loading-text, .error-text {
+    text-align: center;
+    font-size: 16px;
+    color: #f44336;
+    margin-top: 20px;
+  }
+  
+  .table-container {
+    margin-top: 30px;
+  }
+  
+  .material-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .material-table th,
+  .material-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .material-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .material-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .material-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .delete-button {
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    background-color: #d32f2f;
+  }
+  
