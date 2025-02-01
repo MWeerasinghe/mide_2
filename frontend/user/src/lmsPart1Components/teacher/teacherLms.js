@@ -12,6 +12,8 @@ import HomeTeacher from '../../lmsPart2Components/teacher/HomePage';
 import Assignments from '../../lmsPart2Components/teacher/Assignments';
 import AssignmentSubmit from '../../lmsPart2Components/student/AssignmentSubmit';
 import Logout from '../../Components/Logout';
+import DeleteMaterial from './deleteMaterial';
+import DeleteAnnouncement from './deleteAnnouncement';
 
 
 
@@ -38,6 +40,10 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 
 import getTeacherToken from '../../functions/GetTeacherId';
+
+//mitun=====================================================
+import Setting from "../../lmsPart2Components/teacher/Settings";
+import AssignmentAdd from "../../lmsPart2Components/teacher/AssignmentAdd"
 
 
 const NAVIGATION = [
@@ -93,40 +99,63 @@ const NAVIGATION = [
     
     ],
   },
+  // {
+  //   segment: 'reports',
+  //   title: 'Assignments',
+  //   icon: <EditIcon  />,
+  //   children: [
+  //     {
+  //       segment: 'traffic',
+  //       title: (
+  //         <Link to="/teacherLmsPart1/assignments" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+  //           <DescriptionIcon style={{ marginRight: 20 }} />
+  //           බුද්ධ චරිතය
+  //         </Link>
+  //       ),
+  //     },
+  //     {
+  //       segment: 'traffic',
+  //       title: (
+  //         <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+  //           <DescriptionIcon style={{ marginRight: 20 }} />
+  //           අභිධර්මය
+  //         </Link>
+  //       ),
+  //     },
+  //     {
+  //       segment: 'traffic',
+  //       title: (
+  //         <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+  //           <DescriptionIcon style={{ marginRight: 20 }} />
+  //           පාලි
+  //         </Link>
+  //       ),
+  //     },
+  //   ],
+  // },
   {
-    segment: 'reports',
-    title: 'Assignments',
-    icon: <EditIcon  />,
-    children: [
-      {
-        segment: 'traffic',
-        title: (
-          <Link to="/teacherLmsPart1/assignments" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-            <DescriptionIcon style={{ marginRight: 20 }} />
-            බුද්ධ චරිතය
-          </Link>
-        ),
-      },
-      {
-        segment: 'traffic',
-        title: (
-          <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-            <DescriptionIcon style={{ marginRight: 20 }} />
-            අභිධර්මය
-          </Link>
-        ),
-      },
-      {
-        segment: 'traffic',
-        title: (
-          <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-            <DescriptionIcon style={{ marginRight: 20 }} />
-            පාලි
-          </Link>
-        ),
-      },
-    ],
+    segment: 'dashboard',
+    title: (
+      <Link to="/teacherLmsPart1/assignments" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+        Assignment
+      </Link>
+    ),
+    // icon: <CampaignIcon />,
+    icon: <Link to="/teacherLmsPart1/assignments"><EditIcon   /></Link>,
+    path: '/profile',
   },
+  {
+    segment: 'dashboard',
+    title: (
+      <Link to="/teacherLmsPart1/assignmentadd" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+        Assignment Add
+      </Link>
+    ),
+    // icon: <CampaignIcon />,
+    icon: <Link to="/teacherLmsPart1/assignmentadd"><EditIcon   /></Link>,
+    path: '/profile',
+  },
+  
   {
     segment: 'dashboard',
     title: (
@@ -143,8 +172,8 @@ const NAVIGATION = [
   },
   {
     segment: 'dashboard',
-    title: (
-      <Link to="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+   title: (
+      <Link to="/teacherLmsPart1/setting" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
         Settings
       </Link>
     ),
@@ -233,6 +262,10 @@ const user_id = getTeacherToken();
             <Route path="/homePage" element={<HomeTeacher />} />
             <Route path="/assignments" element={<Assignments />} />
             <Route path="/assignmentSubmit" element={<AssignmentSubmit />} />
+            <Route path="/assignmentadd" element={<AssignmentAdd />} />
+            <Route path="/setting" element={<Setting />} />
+            <Route path="/deleteMaterial" element={<DeleteMaterial />} />
+            <Route path="/deleteAnnouncement" element={<DeleteAnnouncement />} />
             <Route path="/logout" element={<Logout />} />
           </Routes>
         </PageContainer>
