@@ -363,6 +363,127 @@ router.post('/addAnnouncement', async (req, res) =>
 });
 
 
+//_____________Get announcements by UserID, Year, Grade, Subject________________________________
+router.post('/getAnnounceById', async (req, res) => 
+{
+    try {
+        const { user_id, year, grade, subject } = req.body;
+
+        // Validate required fields
+        if (!user_id || !year || !grade || !subject) {
+            return res.status(400).json({ success: false, message: "All fields are required." });
+        }
+
+        const table = "announcement";
+        const query = `SELECT * FROM ${table} WHERE user_id=:user_id AND year=:year AND grade=:grade AND subject=:subject`;
+
+        const result = await sequelize.query(query, {
+            replacements: { user_id, year, grade, subject },
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        if (result.length === 0) {
+            return res.status(404).json({ success: false, message: "No announcements found." });
+        }
+
+        res.status(200).json({ success: true, message: "Announcement retrieved successfully.", data: result });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "An error occurred while retrieving the announcement.", error: error.message });
+    }
+});
+
+
+//_____________Delete announcements by UserID, Year, Grade, Subject________________________________
+router.post('/deleteAnnounceById', async (req, res) => 
+{
+    try {
+        const { id } = req.body;
+
+        // Validate required fields
+        if (!id) {
+            return res.status(400).json({ success: false, message: "ID is required." });
+        }
+
+        const table = "announcement";
+        
+        // First, check if the announcement exists
+        const checkQuery = `SELECT * FROM ${table} WHERE id=:id`;
+        const checkResult = await sequelize.query(checkQuery, {
+            replacements: { id },
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        // If no record is found, return a 404 error
+        if (checkResult.length === 0) {
+            return res.status(404).json({ success: false, message: "No announcement found with the given ID." });
+        }
+
+        // Now, delete the announcement
+        const query = `DELETE FROM ${table} WHERE id=:id`;
+        const result = await sequelize.query(query, {
+            replacements: { id },
+            type: sequelize.QueryTypes.DELETE
+        });
+
+        // Check if deletion was successful
+        if (result[0] === 0) {
+            return res.status(500).json({ success: false, message: "Failed to delete the announcement." });
+        }
+
+        res.status(200).json({ success: true, message: "Announcement deleted successfully." });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "An error occurred while deleting the announcement.", error: error.message });
+    }
+});
+
+//___________________Update announcement_______________________
+router.post('/updateAnnounceById', async (req, res) => {
+    try {
+        const { id, year, grade, subject, announce, date } = req.body;
+
+        // Validate required fields
+        if (!id || !year || !grade || !subject || !announce || !date) {
+            return res.status(400).json({ success: false, message: "All fields are required." });
+        }
+
+        const table = "announcement";
+
+        // First, check if the announcement exists
+        const checkQuery = `SELECT * FROM ${table} WHERE id=:id`;
+        const checkResult = await sequelize.query(checkQuery, {
+            replacements: { id },
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        // If no record is found, return a 404 error
+        if (checkResult.length === 0) {
+            return res.status(404).json({ success: false, message: "No announcement found with the given ID." });
+        }
+
+        // Now, update the announcement with the new data
+        const updateQuery = `UPDATE ${table} 
+                             SET year=:year, grade=:grade, subject=:subject, 
+                                 announce=:announce, date=:date 
+                             WHERE id=:id`;
+
+        const result = await sequelize.query(updateQuery, {
+            replacements: { id, year, grade, subject, announce, date },
+            type: sequelize.QueryTypes.UPDATE
+        });
+
+        // If update fails (i.e., no rows were updated)
+        if (result[0] === 0) {
+            return res.status(500).json({ success: false, message: "Failed to update the announcement." });
+        }
+
+        res.status(200).json({ success: true, message: "Announcement updated successfully." });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "An error occurred while updating the announcement.", error: error.message });
+    }
+});
+
+    
+
 //________________________open pdf_____________________________
 router.get('/openpdf/:fileName', async (req, res) => {
     try {
@@ -395,4 +516,162 @@ router.get('/openpdf/:fileName', async (req, res) => {
     }
 });
     
+
+
+//_____________Get Material By TecherId, year, grade, subject________________________________
+router.post('/getMaterialById', async (req, res) => 
+{
+    try {
+        const { user_id, year, grade, subject } = req.body;
+
+        // Validate required fields
+        if (!user_id || !year || !grade || !subject) {
+            return res.status(400).json({ success: false, message: "All fields are required." });
+        }
+
+        // Define table based on grade
+        const validGrades = ["6", "7", "8", "9", "10", "11"];
+        if (!validGrades.includes(grade)) {
+            return res.status(404).json({ success: false, message: "Grade is not defined" });
+        }
+
+        const table = `teachers_${grade}`;
+
+        // Query to fetch data
+        const query = `
+            SELECT * FROM ${table}
+            WHERE user_id = :user_id AND year = :year AND grade = :grade AND subject = :subject
+        `;
+
+        // Execute the query
+        const result = await sequelize.query(query, {
+            replacements: { user_id, year, grade, subject },
+            type: sequelize.QueryTypes.SELECT,
+        });
+
+        // Return success response
+        res.status(200).json({
+            success: true,
+            message: "Successfully fetched data",
+            data: result,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching the data.",
+            error: error.message,
+        });
+    }
+});
+
+//___________Delete material___________________
+router.post('/DeleteMaterialById', async (req, res) => {
+    try {
+        const { id, grade } = req.body;
+        const gradeAsString = grade ? grade.toString() : null;
+
+        // Validate required fields
+        if (!id || !gradeAsString) {
+            return res.status(400).json({ success: false, message: "id and grade are required" });
+        }
+
+        const validGrades = ["6", "7", "8", "9", "10", "11"];
+        if (!validGrades.includes(gradeAsString)) {
+            return res.status(404).json({ success: false, message: "Grade is not defined" });
+        }
+
+        const table = `teachers_${gradeAsString}`;
+
+        const query = `DELETE FROM ${table} WHERE id = :id`;
+
+        // Execute the query
+        const result = await sequelize.query(query, {
+            replacements: { id },
+            type: sequelize.QueryTypes.DELETE,
+        });
+
+        // Check if any rows were deleted
+        if (result[0] === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No material found with the provided id",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Successfully deleted material",
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while deleting the material.",
+            error: error.message,
+        });
+    }
+});
+
+
+
+//__________________get profile details_____________________
+//http://localhost:3000/api/students/getProfileDetails/
+router.get('/getProfileDetails/:user_id', async (req, res) => 
+    {
+        try 
+        {
+            const user_id = req.params.user_id;
+            const query = `SELECT * FROM "Users" WHERE "id" = :user_id`;
+            const buddha = await sequelize.query(query, { replacements: { user_id }, type: sequelize.QueryTypes.SELECT});
+    
+            if(buddha)
+            {
+                res.status(200).json({ success: true, data: buddha });
+            }
+            else
+            {
+                res.status(400).json({ success: false});
+            }
+        } 
+        catch (error) 
+        {
+            console.error('Error fetching student:', error);
+            res.status(500).json({ success: false, message: 'An error occurred while retrieving student.', error: error.message });
+        }
+    });
+
+
+    //______________________________________________________________________
+//__________________add assignments _____________________
+router.post('/addAssignment', async (req, res) => {
+    try {
+      const { name, course, due_date } = req.body;
+  
+      // Validate required fields
+      if (!name || !course || !due_date) {
+        return res.status(400).json({ success: false, message: "All fields are required." });
+      }
+  
+      const table = "assignments";
+      const query = `
+        INSERT INTO ${table}
+        (name, course, due_date)
+        VALUES
+        (:name, :course, :due_date)
+      `;
+  
+      // Execute the query using Sequelize query method
+      const result = await sequelize.query(query, { 
+        replacements: { name, course, due_date },
+        type: sequelize.QueryTypes.INSERT 
+      });
+  
+      res.status(200).json({ success: true, message: "Assignment added successfully.", data: result });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "An error occurred while adding the assignment.", error: error.message });
+    }
+  });
+
+
+
+
 module.exports = router;
